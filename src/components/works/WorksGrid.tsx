@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { WorkCard } from "./WorkCard";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { GAP_PX } from "@/lib/constants";
 import type { Work } from "@/types/work";
 
@@ -13,84 +12,32 @@ interface LayoutItem {
   rowSpan: 1 | 2;
 }
 
-function computeLayout(works: Work[], columns: 2 | 3): LayoutItem[] {
-  const horizontals = works.filter((w) => w.orientation === "horizontal");
-  const verticals = works.filter((w) => w.orientation === "vertical");
+function computeLayout(works: Work[], columns: 2 | 3): { items: LayoutItem[]; blockRows: number } {
   const result: LayoutItem[] = [];
-  let row = 1;
-  let hIdx = 0;
-  let vIdx = 0;
+  // colHeight[i] = rows consumed in column i (0-indexed columns)
+  const colHeight = new Array(columns).fill(0);
 
-  if (columns === 3) {
-    while (hIdx < horizontals.length || vIdx < verticals.length) {
-      const hLeft = horizontals.length - hIdx;
-      const vLeft = verticals.length - vIdx;
+  for (const work of works) {
+    const rowSpan: 1 | 2 = work.orientation === "vertical" ? 2 : 1;
 
-      if (vLeft > 0 && hLeft >= 4) {
-        result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row, rowSpan: 1 });
-        result.push({ work: horizontals[hIdx++], gridColumn: 2, gridRow: row, rowSpan: 1 });
-        result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row + 1, rowSpan: 1 });
-        result.push({ work: horizontals[hIdx++], gridColumn: 2, gridRow: row + 1, rowSpan: 1 });
-        result.push({ work: verticals[vIdx++], gridColumn: 3, gridRow: row, rowSpan: 2 });
-        row += 2;
-      } else if (hLeft >= 3) {
-        result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row, rowSpan: 1 });
-        result.push({ work: horizontals[hIdx++], gridColumn: 2, gridRow: row, rowSpan: 1 });
-        result.push({ work: horizontals[hIdx++], gridColumn: 3, gridRow: row, rowSpan: 1 });
-        row += 1;
-      } else if (vLeft > 0) {
-        result.push({ work: verticals[vIdx++], gridColumn: 3, gridRow: row, rowSpan: 2 });
-        const positions = [
-          { col: 1, rowOffset: 0 },
-          { col: 2, rowOffset: 0 },
-          { col: 1, rowOffset: 1 },
-          { col: 2, rowOffset: 1 },
-        ];
-        for (let i = 0; i < Math.min(hLeft, 4); i++) {
-          result.push({
-            work: horizontals[hIdx++],
-            gridColumn: positions[i].col,
-            gridRow: row + positions[i].rowOffset,
-            rowSpan: 1,
-          });
-        }
-        row += 2;
-      } else {
-        let col = 1;
-        while (hIdx < horizontals.length && col <= 3) {
-          result.push({ work: horizontals[hIdx++], gridColumn: col, gridRow: row, rowSpan: 1 });
-          col += 1;
-        }
-        row += 1;
-      }
+    // Find the column with the smallest height (leftmost on tie)
+    let bestCol = 0;
+    for (let c = 1; c < columns; c++) {
+      if (colHeight[c] < colHeight[bestCol]) bestCol = c;
     }
-  } else {
-    // columns === 2
-    while (hIdx < horizontals.length || vIdx < verticals.length) {
-      const hLeft = horizontals.length - hIdx;
-      const vLeft = verticals.length - vIdx;
-      if (vLeft > 0 && hLeft >= 2) {
-        result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row, rowSpan: 1 });
-        result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row + 1, rowSpan: 1 });
-        result.push({ work: verticals[vIdx++], gridColumn: 2, gridRow: row, rowSpan: 2 });
-        row += 2;
-      } else if (hLeft >= 2) {
-        result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row, rowSpan: 1 });
-        result.push({ work: horizontals[hIdx++], gridColumn: 2, gridRow: row, rowSpan: 1 });
-        row += 1;
-      } else if (vLeft > 0) {
-        result.push({ work: verticals[vIdx++], gridColumn: 2, gridRow: row, rowSpan: 2 });
-        for (let i = 0; i < Math.min(hLeft, 2); i++) {
-          result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row + i, rowSpan: 1 });
-        }
-        row += 2;
-      } else {
-        result.push({ work: horizontals[hIdx++], gridColumn: 1, gridRow: row, rowSpan: 1 });
-        row += 1;
-      }
-    }
+
+    result.push({
+      work,
+      gridColumn: bestCol + 1,       // CSS grid is 1-indexed
+      gridRow: colHeight[bestCol] + 1,
+      rowSpan,
+    });
+
+    colHeight[bestCol] += rowSpan;
   }
-  return result;
+
+  const blockRows = Math.max(...colHeight);
+  return { items: result, blockRows };
 }
 
 interface WorksGridProps {
@@ -103,9 +50,6 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
   const [columns, setColumns] = useState<1 | 2 | 3>(3);
   const [rowHeightPx, setRowHeightPx] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Set up infinite scroll scroll-teleportation
-  useInfiniteScroll(works);
 
   // Column count from viewport width; row height from container width (decoupled)
   useEffect(() => {
@@ -132,17 +76,10 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
     };
   }, []);
 
-  // Compute single-copy layout, then triple with row offsets
-  const tripledLayout = useMemo(() => {
+  const layout = useMemo(() => {
     if (columns === 1 || works.length === 0) return [];
-    const singleLayout = computeLayout(works, columns as 2 | 3);
-    if (singleLayout.length === 0) return [];
-    const maxRow = Math.max(...singleLayout.map((i) => i.gridRow + (i.rowSpan - 1)));
-    return [
-      ...singleLayout.map((item) => ({ ...item, copyIdx: 0 })),
-      ...singleLayout.map((item) => ({ ...item, gridRow: item.gridRow + maxRow, copyIdx: 1 })),
-      ...singleLayout.map((item) => ({ ...item, gridRow: item.gridRow + maxRow * 2, copyIdx: 2 })),
-    ];
+    const { items } = computeLayout(works, columns as 2 | 3);
+    return items;
   }, [works, columns]);
 
   // Mobile: 1-column stack in source order, no infinite scroll
@@ -171,9 +108,9 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
         gap: `${GAP_PX}px`,
       }}
     >
-      {tripledLayout.map((item) => (
+      {layout.map((item) => (
         <div
-          key={`${item.work.id}-${item.copyIdx}`}
+          key={item.work.id}
           style={{
             gridColumn: item.gridColumn,
             gridRow: `${item.gridRow} / span ${item.rowSpan}`,

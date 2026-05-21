@@ -55,13 +55,18 @@ export function Header() {
                   key={f.id}
                   onClick={() => setActiveFilter(f.id)}
                   className="relative cursor-pointer bg-transparent border-none"
-                  style={{ padding: "4px 12px" }}
+                  style={{ padding: "3px 10px" }}
                 >
                   {activeFilter === f.id && (
                     <motion.div
                       layoutId="filter-indicator"
-                      className="absolute inset-0 bg-white"
+                      initial={false}
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "white",
+                      }}
                     />
                   )}
                   <span
