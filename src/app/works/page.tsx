@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { WorksGrid } from "@/components/works/WorksGrid";
 import { VideoLightbox } from "@/components/works/VideoLightbox";
+import { MarqueeFooter } from "@/components/works/MarqueeFooter";
 import { WORKS } from "@/data/works";
 import { useFilter } from "@/context/FilterContext";
 import type { Work } from "@/types/work";
@@ -22,6 +23,7 @@ export default function WorksPage() {
     <>
       <main style={{ paddingTop: "var(--header-height)", minHeight: "100vh" }}>
         <WorksGrid works={filteredWorks} onOpen={setSelectedWork} />
+        <MarqueeFooter />
       </main>
       <VideoLightbox work={selectedWork} onClose={handleClose} />
     </>

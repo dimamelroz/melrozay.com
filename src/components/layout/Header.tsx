@@ -36,66 +36,73 @@ export function Header() {
         {/* Brand name */}
         <Link
           href="/"
-          className="text-white font-bold uppercase tracking-wider no-underline"
-          style={{ fontSize: "clamp(20px, 2.5vw, 24px)" }}
+          className="text-white font-bold no-underline"
+          style={{ fontSize: "clamp(20px, 2.5vw, 24px)", letterSpacing: "-0.04em" }}
         >
-          DIMA MELROZ
+          Dima Melroz
         </Link>
+
+        {/* Filter segmented control — absolutely centered, desktop only, /works only */}
+        {isWorks && (
+          <LayoutGroup id="filter">
+            <div
+              className="hidden md:flex items-center"
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              {FILTERS.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setActiveFilter(f.id)}
+                  className="relative cursor-pointer bg-transparent border-none"
+                  style={{ padding: "2px 6px" }}
+                >
+                  {activeFilter === f.id && (
+                    <motion.div
+                      layoutId="filter-indicator"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "white",
+                      }}
+                    />
+                  )}
+                  <span
+                    className="relative"
+                    style={{
+                      zIndex: 1,
+                      fontSize: "14px",
+                      lineHeight: 1,
+                      display: "block",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: activeFilter === f.id ? "black" : "rgba(255,255,255,0.6)",
+                      transition: "color 150ms",
+                    }}
+                  >
+                    {f.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </LayoutGroup>
+        )}
 
         {/* Right side */}
         <div className="flex items-center gap-4">
-          {/* Filter segmented control — desktop only, /works only */}
-          {isWorks && (
-            <LayoutGroup id="filter">
-              <div
-                className="hidden md:flex items-center"
-                style={{ border: "1px solid rgba(255,255,255,0.4)" }}
-              >
-                {FILTERS.map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => setActiveFilter(f.id)}
-                    className="relative cursor-pointer bg-transparent border-none"
-                    style={{ padding: "3px 10px" }}
-                  >
-                    {activeFilter === f.id && (
-                      <motion.div
-                        layoutId="filter-indicator"
-                        initial={false}
-                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                        style={{
-                          position: "absolute",
-                          inset: 0,
-                          background: "white",
-                        }}
-                      />
-                    )}
-                    <span
-                      className="relative"
-                      style={{
-                        zIndex: 1,
-                        fontSize: "12px",
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: activeFilter === f.id ? "black" : "rgba(255,255,255,0.6)",
-                        transition: "color 150ms",
-                      }}
-                    >
-                      {f.label}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </LayoutGroup>
-          )}
-
           {/* About button — desktop only */}
           <button
             onClick={() => setAboutOpen(true)}
             className="hidden md:inline-block cursor-pointer bg-transparent border-none text-white/70 hover:text-white transition-colors"
             style={{ fontSize: "14px" }}
           >
-            About
+            ABOUT
           </button>
 
           {/* Mobile menu trigger */}

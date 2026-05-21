@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { WorkCard } from "./WorkCard";
 import { GAP_PX } from "@/lib/constants";
 import type { Work } from "@/types/work";
@@ -82,17 +83,25 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
     return items;
   }, [works, columns]);
 
-  // Mobile: 1-column stack in source order, no infinite scroll
+  const gridKey = works.map((w) => w.id).join(",");
+
+  // Mobile: 1-column stack in source order
   if (columns === 1) {
     return (
-      <div ref={containerRef} style={{ display: "flex", flexDirection: "column", gap: `${GAP_PX}px` }}>
-        {works.map((work) => (
-          <WorkCard
+      <div key={gridKey} ref={containerRef} style={{ display: "flex", flexDirection: "column", gap: `${GAP_PX}px` }}>
+        {works.map((work, index) => (
+          <motion.div
             key={work.id}
-            work={work}
-            onClick={() => onOpen(work)}
-            forcedAspect={work.orientation === "horizontal" ? "16/9" : "9/16"}
-          />
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: Math.min(index, 12) * 0.05, ease: "easeOut" }}
+          >
+            <WorkCard
+              work={work}
+              onClick={() => onOpen(work)}
+              forcedAspect={work.orientation === "horizontal" ? "16/9" : "9/16"}
+            />
+          </motion.div>
         ))}
       </div>
     );
@@ -100,6 +109,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
 
   return (
     <div
+      key={gridKey}
       ref={containerRef}
       style={{
         display: "grid",
@@ -108,9 +118,12 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
         gap: `${GAP_PX}px`,
       }}
     >
-      {layout.map((item) => (
-        <div
+      {layout.map((item, index) => (
+        <motion.div
           key={item.work.id}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: Math.min(index, 12) * 0.05, ease: "easeOut" }}
           style={{
             gridColumn: item.gridColumn,
             gridRow: `${item.gridRow} / span ${item.rowSpan}`,
@@ -121,7 +134,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
             onClick={() => onOpen(item.work)}
             forcedAspect="fill"
           />
-        </div>
+        </motion.div>
       ))}
     </div>
   );
