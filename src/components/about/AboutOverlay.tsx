@@ -4,8 +4,18 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { FaTelegramPlane, FaInstagram, FaVimeoV } from "react-icons/fa";
 import { useAbout } from "@/context/AboutContext";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
+
+const HEADING_STYLE = {
+  fontSize: "clamp(48px, 6vw, 72px)",
+  fontWeight: 700,
+  marginBottom: "24px",
+  color: "white",
+  letterSpacing: "-0.04em",
+  whiteSpace: "nowrap",
+} as const;
 
 export function AboutOverlay() {
   const { open, setOpen } = useAbout();
@@ -38,7 +48,7 @@ export function AboutOverlay() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[150] bg-black/85 backdrop-blur-3xl overflow-y-auto"
+          className="fixed inset-0 z-[150] bg-black/30 backdrop-blur-3xl overflow-y-auto"
           onClick={() => setOpen(false)}
         >
           {/* Close button */}
@@ -50,68 +60,79 @@ export function AboutOverlay() {
             <X size={32} />
           </button>
 
-          {/* Content — stop propagation so backdrop click doesn't fire when clicking content */}
+          {/* Content */}
           <div
-            className="max-w-3xl mx-auto px-8 py-20"
+            className="max-w-6xl mx-auto px-8 py-20"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2
-              style={{
-                fontSize: "clamp(48px, 6vw, 72px)",
-                fontWeight: 700,
-                marginBottom: "48px",
-                textTransform: "uppercase",
-                color: "white",
-                letterSpacing: "0.02em",
-              }}
+            {/* Two-column row */}
+            <div
+              className="flex flex-col md:flex-row"
+              style={{ gap: 64, alignItems: "stretch" }}
             >
-              DIMA MELROZ
-            </h2>
+              {/* Left column: heading + photo */}
+              <div style={{ flexShrink: 0, width: "100%", maxWidth: 340 }}>
+                <h2 style={HEADING_STYLE}>Dima Melroz</h2>
+                <img
+                  src="/placeholder/about.svg"
+                  alt="Dima Melroz"
+                  style={{
+                    width: "100%",
+                    maxWidth: 340,
+                    aspectRatio: "3/4",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+              </div>
 
-            <div className="flex flex-col md:flex-row gap-8 items-start">
-              <img
-                src="/placeholder/about.svg"
-                alt="Dima Melroz"
-                width={200}
-                height={200}
-                className="object-cover flex-shrink-0"
-                style={{ width: 200, height: 200 }}
-              />
+              {/* Right column: invisible spacer → bio → contacts pinned to bottom */}
+              <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                {/* Invisible heading spacer — mirrors left heading height exactly */}
+                <h2
+                  aria-hidden="true"
+                  style={{ ...HEADING_STYLE, visibility: "hidden" }}
+                >
+                  Dima Melroz
+                </h2>
 
-              <div className="flex flex-col gap-6">
+                {/* Bio */}
                 <p
                   style={{
-                    color: "rgba(245,247,250,0.8)",
+                    color: "rgba(245,247,250,0.85)",
                     fontSize: "1.0625rem",
-                    lineHeight: 1.6,
-                    maxWidth: "600px",
+                    lineHeight: 1.7,
                   }}
                 >
                   Режиссёр рекламы, музыкальных клипов и AI-роликов.{" "}
                   [Здесь будет реальное био — заглушка]
                 </p>
 
-                <div className="flex flex-wrap gap-8">
+                {/* Contacts pinned to bottom of column */}
+                <div
+                  className="flex flex-wrap"
+                  style={{ marginTop: "auto", paddingTop: 32, gap: 24 }}
+                >
                   {[
-                    { label: "TELEGRAM", href: "https://t.me/dimamelroz" },
-                    { label: "INSTAGRAM", href: "https://instagram.com/dimamelroz" },
-                    { label: "VIMEO", href: "https://vimeo.com/dimamelroz" },
-                  ].map(({ label, href }) => (
+                    { icon: <FaTelegramPlane size={24} />, label: "Telegram", href: "https://t.me/" },
+                    { icon: <FaInstagram size={24} />, label: "Instagram", href: "https://instagram.com/" },
+                    { icon: <FaVimeoV size={24} />, label: "Vimeo", href: "https://vimeo.com/" },
+                  ].map(({ icon, label, href }) => (
                     <a
                       key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={label}
                       style={{
-                        fontSize: "14px",
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: "rgba(245,247,250,0.7)",
-                        textDecoration: "none",
+                        color: "rgba(255,255,255,0.7)",
+                        display: "flex",
+                        alignItems: "center",
+                        transition: "color 150ms",
                       }}
-                      className="hover:text-white hover:underline transition-colors"
+                      className="hover:text-white"
                     >
-                      {label}
+                      {icon}
                     </a>
                   ))}
                 </div>
