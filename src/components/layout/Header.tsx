@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, LayoutGroup } from "framer-motion";
 import { Plus } from "lucide-react";
 import { useFilter } from "@/context/FilterContext";
 import { useAbout } from "@/context/AboutContext";
@@ -46,45 +46,47 @@ export function Header() {
         <div className="flex items-center gap-4">
           {/* Filter segmented control — desktop only, /works only */}
           {isWorks && (
-            <div
-              className="hidden md:flex items-center"
-              style={{ border: "1px solid rgba(255,255,255,0.4)" }}
-            >
-              {FILTERS.map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => setActiveFilter(f.id)}
-                  className="relative cursor-pointer bg-transparent border-none"
-                  style={{ padding: "3px 10px" }}
-                >
-                  {activeFilter === f.id && (
-                    <motion.div
-                      layoutId="filter-indicator"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        background: "white",
-                      }}
-                    />
-                  )}
-                  <span
-                    className="relative"
-                    style={{
-                      zIndex: 1,
-                      fontSize: "12px",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: activeFilter === f.id ? "black" : "rgba(255,255,255,0.6)",
-                      transition: "color 150ms",
-                    }}
+            <LayoutGroup id="filter">
+              <div
+                className="hidden md:flex items-center"
+                style={{ border: "1px solid rgba(255,255,255,0.4)" }}
+              >
+                {FILTERS.map((f) => (
+                  <button
+                    key={f.id}
+                    onClick={() => setActiveFilter(f.id)}
+                    className="relative cursor-pointer bg-transparent border-none"
+                    style={{ padding: "3px 10px" }}
                   >
-                    {f.label}
-                  </span>
-                </button>
-              ))}
-            </div>
+                    {activeFilter === f.id && (
+                      <motion.div
+                        layoutId="filter-indicator"
+                        initial={false}
+                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          background: "white",
+                        }}
+                      />
+                    )}
+                    <span
+                      className="relative"
+                      style={{
+                        zIndex: 1,
+                        fontSize: "12px",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        color: activeFilter === f.id ? "black" : "rgba(255,255,255,0.6)",
+                        transition: "color 150ms",
+                      }}
+                    >
+                      {f.label}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </LayoutGroup>
           )}
 
           {/* About button — desktop only */}
