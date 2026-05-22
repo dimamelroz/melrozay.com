@@ -57,13 +57,17 @@ export function Header() {
               {FILTERS.map((f) => (
                 <button
                   key={f.id}
-                  onClick={() => setActiveFilter(f.id)}
+                  onClick={() => {
+                    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+                    requestAnimationFrame(() => setActiveFilter(f.id));
+                  }}
                   className="relative cursor-pointer bg-transparent border-none"
                   style={{ padding: "2px 6px" }}
                 >
                   {activeFilter === f.id && (
                     <motion.div
                       layoutId="filter-indicator"
+                      layout="position"
                       initial={false}
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                       style={{
@@ -82,7 +86,8 @@ export function Header() {
                       display: "block",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
-                      color: activeFilter === f.id ? "black" : "rgba(255,255,255,0.6)",
+                      color: activeFilter === f.id ? "black" : "white",
+                      fontWeight: 700,
                       transition: "color 150ms",
                     }}
                   >
@@ -99,8 +104,8 @@ export function Header() {
           {/* About button — desktop only */}
           <button
             onClick={() => setAboutOpen(true)}
-            className="hidden md:inline-block cursor-pointer bg-transparent border-none text-white/70 hover:text-white transition-colors"
-            style={{ fontSize: "14px" }}
+            className="hidden md:inline-block cursor-pointer bg-transparent border-none text-white hover:text-white transition-colors"
+            style={{ fontSize: "14px", fontWeight: 700 }}
           >
             ABOUT
           </button>

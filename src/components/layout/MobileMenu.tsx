@@ -24,7 +24,8 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
   useLockBodyScroll(open);
 
   const handleFilterSelect = (id: "all" | "commercial" | "music-video") => {
-    setActiveFilter(id);
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+    requestAnimationFrame(() => setActiveFilter(id));
     onClose();
   };
 
@@ -59,34 +60,25 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               <button
                 key={item.id}
                 onClick={() => handleFilterSelect(item.id)}
-                className="relative flex flex-col items-center min-h-[48px] px-4 py-4 cursor-pointer bg-transparent border-none"
-                style={{
-                  fontSize: "24px",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "white",
-                  fontWeight: 500,
-                }}
+                className="flex items-center justify-center min-h-[48px] cursor-pointer border-none bg-transparent"
               >
-                {item.label}
-                {activeFilter === item.id && (
-                  <span
-                    className="absolute bottom-3 left-1/2 -translate-x-1/2"
-                    style={{ width: "100%", height: "1px", background: "white", display: "block" }}
-                  />
-                )}
+                <span
+                  style={{
+                    display: "inline-block",
+                    padding: "2px 6px",
+                    lineHeight: 1,
+                    fontSize: "24px",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    fontWeight: 500,
+                    backgroundColor: activeFilter === item.id ? "white" : "transparent",
+                    color: activeFilter === item.id ? "black" : "white",
+                  }}
+                >
+                  {item.label}
+                </span>
               </button>
             ))}
-
-            {/* Separator */}
-            <div
-              style={{
-                width: "40px",
-                height: "1px",
-                background: "rgba(255,255,255,0.3)",
-                margin: "8px 0",
-              }}
-            />
 
             {/* About */}
             <button
@@ -98,6 +90,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                 textTransform: "uppercase",
                 color: "white",
                 fontWeight: 500,
+                marginTop: "64px",
               }}
             >
               ABOUT
