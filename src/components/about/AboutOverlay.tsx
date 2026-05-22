@@ -62,17 +62,25 @@ export function AboutOverlay() {
 
           {/* Content */}
           <div
-            className="max-w-6xl mx-auto px-8 py-20"
+            className="about-container max-w-6xl mx-auto px-8 py-20"
             onClick={(e) => e.stopPropagation()}
           >
+            <style>{`
+              @media (max-width: 767px) {
+                .about-spacer { display: none !important; }
+                .about-container { padding-top: 24px !important; padding-bottom: 32px !important; }
+                .about-heading { margin-bottom: 16px !important; line-height: 0.9 !important; margin-top: -10px !important; }
+                .about-row { gap: 20px !important; }
+              }
+            `}</style>
             {/* Two-column row */}
             <div
-              className="flex flex-col md:flex-row"
+              className="about-row flex flex-col md:flex-row"
               style={{ gap: 64, alignItems: "stretch" }}
             >
               {/* Left column: heading + photo */}
               <div style={{ flexShrink: 0, width: "100%", maxWidth: 340 }}>
-                <h2 style={HEADING_STYLE}>Dima Melroz</h2>
+                <h2 className="about-heading" style={HEADING_STYLE}>Dima Melroz</h2>
                 <img
                   src="/placeholder/about.svg"
                   alt="Dima Melroz"
@@ -91,6 +99,7 @@ export function AboutOverlay() {
                 {/* Invisible heading spacer — mirrors left heading height exactly */}
                 <h2
                   aria-hidden="true"
+                  className="about-spacer"
                   style={{ ...HEADING_STYLE, visibility: "hidden" }}
                 >
                   Dima Melroz
