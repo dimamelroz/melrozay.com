@@ -29,13 +29,26 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       }}
       className={`${wrapperClass} relative overflow-hidden cursor-pointer group focus-visible:outline focus-visible:outline-2 focus-visible:outline-white`}
     >
-      {/* Cover image */}
-      <img
-        src={work.cover}
-        alt={work.title}
-        loading="lazy"
-        className="w-full h-full object-cover"
-      />
+      {/* Cover — video preview if available, otherwise image */}
+      {work.previewVideo ? (
+        <video
+          src={work.previewVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="w-full h-full object-cover"
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      ) : (
+        <img
+          src={work.cover}
+          alt={work.title}
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+      )}
 
       {/* Hover overlay — pointer-events-none so it never blocks taps (Rule 4) */}
       <div

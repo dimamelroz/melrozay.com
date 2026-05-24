@@ -3,14 +3,15 @@ import type { Work } from "@/types/work";
 // 12 horizontal (7 commercial + 5 music-video) + 3 vertical (music-video) at positions 4, 9, 13
 export const WORKS: Work[] = [
   {
-    id: "nike-just-run",
-    title: "Nike — Just Run",
-    role: "Director",
-    projectType: "Commercial",
+    id: "dobry-cola",
+    title: "Добрый",
+    role: "DIRECTOR",
+    projectType: "OLV",
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-1.svg",
-    fullVideo: { provider: "youtube", id: "dQw4w9WgXcQ" },
+    previewVideo: "/works/dobry-preview.mp4",
+    fullVideo: { provider: "kinescope", id: "fWNV18hpcYBXbTo6icfmiu" },
   },
   {
     id: "sber-budushchee",

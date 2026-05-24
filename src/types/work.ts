@@ -10,5 +10,6 @@ export interface Work {
   filterGroup: FilterGroup;
   orientation: WorkOrientation;
   cover: string;
+  previewVideo?: string;
   fullVideo: { provider: VideoProvider; id: string };
 }

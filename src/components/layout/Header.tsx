@@ -45,14 +45,12 @@ export function Header() {
         {/* Filter segmented control — absolutely centered, desktop only, /works only */}
         {isWorks && (
           <LayoutGroup id="filter">
-            <div
+            <motion.div
+              initial={{ x: "-50%", y: "calc(-50% - 24px)", opacity: 0 }}
+              animate={{ x: "-50%", y: "-50%", opacity: 1 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="hidden md:flex items-center"
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
+              style={{ position: "absolute", left: "50%", top: "50%" }}
             >
               {FILTERS.map((f) => (
                 <button
@@ -95,7 +93,7 @@ export function Header() {
                   </span>
                 </button>
               ))}
-            </div>
+            </motion.div>
           </LayoutGroup>
         )}
 
