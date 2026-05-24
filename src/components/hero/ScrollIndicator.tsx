@@ -13,7 +13,7 @@ export function ScrollIndicator({ onClick }: ScrollIndicatorProps) {
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
       <Link
         href="/works"
-        onClick={onClick}
+        onClick={(e) => { e.preventDefault(); onClick?.(); }}
         aria-label="Go to works"
         className="no-underline flex flex-col items-center gap-1 min-w-[48px] min-h-[48px] justify-center cursor-pointer p-2"
       >

@@ -1,17 +1,21 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import { HeroVideo } from "@/components/hero/HeroVideo";
 import { ScrollIndicator } from "@/components/hero/ScrollIndicator";
 import { FaTelegramPlane, FaInstagram, FaVimeoV } from "react-icons/fa";
 
 export default function HomePage() {
   const router = useRouter();
+  const [leaving, setLeaving] = useState(false);
 
   const goToWorks = useCallback(() => {
-    router.push("/works");
-  }, [router]);
+    if (leaving) return;
+    setLeaving(true);
+    setTimeout(() => router.push("/works"), 500);
+  }, [router, leaving]);
 
   useEffect(() => {
     let touchStartY = 0;
@@ -39,7 +43,11 @@ export default function HomePage() {
   }, [goToWorks]);
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden">
+    <motion.main
+      className="relative w-screen h-screen overflow-hidden"
+      animate={leaving ? { y: "-100%" } : { y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
       <HeroVideo />
       <ScrollIndicator onClick={goToWorks} />
       <div
@@ -77,6 +85,6 @@ export default function HomePage() {
           </a>
         ))}
       </div>
-    </main>
+    </motion.main>
   );
 }

@@ -30,7 +30,16 @@ export default function WorksPage() {
 
   return (
     <>
-      <main style={{ display: "flex", flexDirection: "column", minHeight: "100vh", paddingTop: "var(--header-height)" }}>
+      <style>{`
+        @keyframes works-slide-up {
+          from { transform: translateY(300px); opacity: 0; }
+          to   { transform: translateY(0); opacity: 1; }
+        }
+        .works-enter {
+          animation: works-slide-up 1.5s ease both;
+        }
+      `}</style>
+      <main className="works-enter" style={{ display: "flex", flexDirection: "column", minHeight: "100vh", paddingTop: "var(--header-height)" }}>
         <div style={{ flex: "1 0 auto" }}>
           <WorksGrid works={filteredWorks} onOpen={setSelectedWork} />
         </div>
