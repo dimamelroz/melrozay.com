@@ -4,7 +4,8 @@ export type VideoProvider = "youtube" | "vimeo" | "kinescope";
 
 export interface Work {
   id: string;
-  title: string;
+  headline?: string;
+  subtitle?: string;
   role: string;
   projectType: string;
   filterGroup: FilterGroup;

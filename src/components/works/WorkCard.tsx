@@ -44,7 +44,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       ) : (
         <img
           src={work.cover}
-          alt={work.title}
+          alt={work.subtitle ?? work.headline ?? ""}
           loading="lazy"
           className="w-full h-full object-cover"
         />
@@ -55,23 +55,51 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
         className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
       />
 
+      {/* Top-right soft radial backdrop */}
+      <div
+        className="absolute top-0 right-0 pointer-events-none opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200"
+        style={{
+          width: "70%",
+          height: "60%",
+          background: "radial-gradient(ellipse at top right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 70%)",
+        }}
+      />
+
       {/* Role — top-right, pointer-events-none */}
       <span
-        className="absolute top-3 right-3 text-xs uppercase tracking-wider text-[var(--color-text-muted)] opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        className="absolute top-3 right-3 text-xs uppercase tracking-wider text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
       >
         {work.role}
       </span>
 
       {/* Title — bottom-left, pointer-events-none */}
-      <span
-        className="absolute bottom-3 left-3 text-lg md:text-xl font-semibold text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
-      >
-        {work.title}
-      </span>
+      <div className="absolute bottom-3 left-3 flex flex-col leading-tight text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+        {work.headline && (
+          <span className="text-lg md:text-xl" style={{ fontWeight: 700 }}>{work.headline}</span>
+        )}
+        {work.subtitle && (
+          <span
+            className={work.headline ? "text-xs md:text-sm" : "text-lg md:text-xl"}
+            style={{ fontWeight: work.headline ? 400 : 600 }}
+          >
+            {work.subtitle}
+          </span>
+        )}
+      </div>
+
+      {/* Bottom-right soft radial backdrop */}
+      <div
+        className="absolute bottom-0 right-0 pointer-events-none opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200"
+        style={{
+          width: "70%",
+          height: "60%",
+          background: "radial-gradient(ellipse at bottom right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 70%)",
+        }}
+      />
 
       {/* ProjectType — bottom-right, pointer-events-none */}
       <span
-        className="absolute bottom-3 right-3 text-xs uppercase tracking-wider text-[var(--color-text-muted)] opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        className="absolute bottom-3 right-3 text-xs uppercase tracking-wider text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
       >
         {work.projectType}
       </span>
