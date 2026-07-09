@@ -43,8 +43,25 @@ export default function WorksPage() {
         <div style={{ flex: "1 0 auto" }}>
           <WorksGrid works={filteredWorks} onOpen={setSelectedWork} />
         </div>
-        <div style={{ minHeight: "clamp(80px, 14vw, 200px)" }}>
+        <div style={{ position: "relative", minHeight: "clamp(80px, 14vw, 200px)" }}>
           {showMarquee && <MarqueeFooter />}
+          <div
+            style={{
+              position: "absolute",
+              right: "clamp(16px, 3vw, 40px)",
+              bottom: "clamp(12px, 2vw, 24px)",
+              zIndex: 2,
+              color: "rgba(255,255,255,0.45)",
+              fontSize: "10px",
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              lineHeight: 1,
+              pointerEvents: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            ручная работа нейросети
+          </div>
         </div>
       </main>
       <VideoLightbox work={selectedWork} onClose={handleClose} />
