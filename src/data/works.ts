@@ -16,7 +16,7 @@ export const WORKS: Work[] = [
   },
   {
     id: "wls-ya-tebya-lyublyu",
-    headline: "WLS",
+    headline: "WHOLE LOTTA SWAG",
     subtitle: "Я тебя люблю",
     role: "DIRECTOR + EDITOR",
     projectType: "MUSIC VIDEO",
@@ -97,7 +97,7 @@ export const WORKS: Work[] = [
   },
   {
     id: "wls-zhit-hochu",
-    headline: "WLS",
+    headline: "WHOLE LOTTA SWAG",
     subtitle: "Я жить хочу!",
     role: "DIRECTOR + EDITOR",
     projectType: "MUSIC VIDEO",

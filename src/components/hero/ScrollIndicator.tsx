@@ -23,10 +23,9 @@ export function ScrollIndicator({ onClick }: ScrollIndicatorProps) {
           className="flex flex-col items-center gap-1"
         >
           <span
-            style={{ fontSize: "14px", color: "white", letterSpacing: "0.1em", fontWeight: 700 }}
-            className="uppercase"
+            style={{ fontSize: "14px", color: "white", letterSpacing: "-0.035em", fontWeight: 700 }}
           >
-            WORKS
+            works
           </span>
           <ChevronDown size={20} color="white" />
         </motion.span>

@@ -10,9 +10,9 @@ import { useAbout } from "@/context/AboutContext";
 import { MobileMenu } from "./MobileMenu";
 
 const FILTERS = [
-  { id: "all" as const, label: "ALL" },
-  { id: "commercial" as const, label: "COMMERCIAL" },
-  { id: "music-video" as const, label: "MUSIC VIDEO" },
+  { id: "all" as const, label: "all" },
+  { id: "commercial" as const, label: "commercial" },
+  { id: "music-video" as const, label: "music video" },
 ];
 
 export function Header() {
@@ -82,8 +82,7 @@ export function Header() {
                       fontSize: "14px",
                       lineHeight: 1,
                       display: "block",
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
+                      letterSpacing: "-0.035em",
                       color: activeFilter === f.id ? "black" : "white",
                       fontWeight: 700,
                       transition: "color 150ms",
@@ -103,9 +102,9 @@ export function Header() {
           <button
             onClick={() => setAboutOpen(true)}
             className="hidden md:inline-block cursor-pointer bg-transparent border-none text-white hover:text-white transition-colors"
-            style={{ fontSize: "14px", fontWeight: 700 }}
+            style={{ fontSize: "14px", fontWeight: 700, letterSpacing: "-0.035em" }}
           >
-            ABOUT
+            about
           </button>
 
           {/* Mobile menu trigger */}

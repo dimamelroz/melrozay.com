@@ -9,6 +9,14 @@ interface WorkCardProps {
 }
 
 export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
+  const roleLabel = work.role.toLocaleLowerCase("ru-RU");
+  const projectTypeLabel = work.projectType.toLocaleLowerCase("ru-RU");
+  const hasHeadline = Boolean(work.headline);
+  const headlineLabel = work.headline?.toLocaleUpperCase("ru-RU");
+  const subtitleLabel = hasHeadline
+    ? work.subtitle
+    : work.subtitle?.toLocaleUpperCase("ru-RU");
+
   const wrapperClass =
     forcedAspect === "fill"
       ? "w-full h-full"
@@ -67,22 +75,26 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
 
       {/* Role — top-right, pointer-events-none */}
       <span
-        className="absolute top-3 right-3 text-xs uppercase tracking-wider text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        className="absolute top-3 right-3 text-xs text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        style={{ letterSpacing: "-0.035em" }}
       >
-        {work.role}
+        {roleLabel}
       </span>
 
       {/* Title — bottom-left, pointer-events-none */}
-      <div className="absolute bottom-3 left-3 flex flex-col leading-tight text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-        {work.headline && (
-          <span className="text-lg md:text-xl" style={{ fontWeight: 700 }}>{work.headline}</span>
+      <div
+        className="absolute bottom-3 left-3 flex flex-col text-xs text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        style={{ letterSpacing: "-0.035em", lineHeight: 1.05, gap: 1 }}
+      >
+        {hasHeadline && (
+          <span className="text-base md:text-lg" style={{ fontWeight: 700 }}>{headlineLabel}</span>
         )}
-        {work.subtitle && (
+        {subtitleLabel && (
           <span
-            className={work.headline ? "text-xs md:text-sm" : "text-lg md:text-xl"}
-            style={{ fontWeight: work.headline ? 400 : 600 }}
+            className={hasHeadline ? undefined : "text-base md:text-lg"}
+            style={{ fontWeight: hasHeadline ? 400 : 700 }}
           >
-            {work.subtitle}
+            {subtitleLabel}
           </span>
         )}
       </div>
@@ -99,9 +111,10 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
 
       {/* ProjectType — bottom-right, pointer-events-none */}
       <span
-        className="absolute bottom-3 right-3 text-xs uppercase tracking-wider text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        className="absolute bottom-3 right-3 text-xs text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        style={{ letterSpacing: "-0.035em" }}
       >
-        {work.projectType}
+        {projectTypeLabel}
       </span>
     </div>
   );

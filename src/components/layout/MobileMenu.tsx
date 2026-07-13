@@ -12,9 +12,9 @@ interface MobileMenuProps {
 }
 
 const FILTER_ITEMS = [
-  { id: "all" as const, label: "ALL" },
-  { id: "commercial" as const, label: "COMMERCIAL" },
-  { id: "music-video" as const, label: "MUSIC VIDEO" },
+  { id: "all" as const, label: "all" },
+  { id: "commercial" as const, label: "commercial" },
+  { id: "music-video" as const, label: "music video" },
 ];
 
 export function MobileMenu({ open, onClose }: MobileMenuProps) {
@@ -68,8 +68,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                     padding: "2px 6px",
                     lineHeight: 1,
                     fontSize: "24px",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
+                    letterSpacing: "-0.035em",
                     fontWeight: 500,
                     backgroundColor: activeFilter === item.id ? "white" : "transparent",
                     color: activeFilter === item.id ? "black" : "white",
@@ -86,14 +85,13 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
               className="min-h-[48px] px-4 py-4 cursor-pointer bg-transparent border-none"
               style={{
                 fontSize: "24px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
+                letterSpacing: "-0.035em",
                 color: "white",
                 fontWeight: 500,
                 marginTop: "64px",
               }}
             >
-              ABOUT
+              about
             </button>
           </nav>
         </motion.div>

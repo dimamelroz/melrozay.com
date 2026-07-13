@@ -54,7 +54,7 @@ export default function WorksPage() {
               color: "rgba(255,255,255,0.45)",
               fontSize: "10px",
               fontWeight: 700,
-              letterSpacing: "0.08em",
+              letterSpacing: "-0.035em",
               lineHeight: 1,
               pointerEvents: "none",
               whiteSpace: "nowrap",
