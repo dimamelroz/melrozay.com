@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { FaTelegramPlane, FaInstagram, FaVimeoV } from "react-icons/fa";
 import { useAbout } from "@/context/AboutContext";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
@@ -17,9 +17,34 @@ const HEADING_STYLE = {
   whiteSpace: "nowrap",
 } as const;
 
+const ABOUT_PHOTOS = [
+  { src: "/about/dima-about-main.jpg", alt: "Dima Melroz" },
+  { src: "/about/dima-about-set-1.jpg", alt: "Dima Melroz on set" },
+  { src: "/about/dima-about-set-2.jpg", alt: "Dima Melroz behind the camera" },
+];
+
+const PHOTO_SLIDE_VARIANTS = {
+  enter: (direction: number) => ({ x: direction > 0 ? "100%" : "-100%" }),
+  center: { x: 0 },
+  exit: (direction: number) => ({ x: direction > 0 ? "-100%" : "100%" }),
+};
+
 export function AboutOverlay() {
   const { open, setOpen } = useAbout();
   const [mounted, setMounted] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [photoDirection, setPhotoDirection] = useState(1);
+
+  const showPreviousPhoto = () => {
+    setPhotoDirection(-1);
+    setCurrentPhotoIndex((index) =>
+      (index + ABOUT_PHOTOS.length - 1) % ABOUT_PHOTOS.length
+    );
+  };
+  const showNextPhoto = () => {
+    setPhotoDirection(1);
+    setCurrentPhotoIndex((index) => (index + 1) % ABOUT_PHOTOS.length);
+  };
 
   useLockBodyScroll(open);
 
@@ -30,12 +55,23 @@ export function AboutOverlay() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
+      if (e.key === "ArrowLeft") showPreviousPhoto();
+      if (e.key === "ArrowRight") showNextPhoto();
     };
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
     }
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, setOpen]);
+
+  useEffect(() => {
+    if (!open) return;
+    const timeout = window.setTimeout(() => {
+      setPhotoDirection(1);
+      setCurrentPhotoIndex((index) => (index + 1) % ABOUT_PHOTOS.length);
+    }, 4000);
+    return () => window.clearTimeout(timeout);
+  }, [open, currentPhotoIndex]);
 
   if (!mounted) return null;
 
@@ -62,7 +98,7 @@ export function AboutOverlay() {
 
           {/* Content */}
           <div
-            className="about-container max-w-6xl mx-auto px-8 py-20"
+            className="about-container max-w-6xl mx-auto px-8 pt-10 pb-20"
             onClick={(e) => e.stopPropagation()}
           >
             <style>{`
@@ -76,26 +112,109 @@ export function AboutOverlay() {
             {/* Two-column row */}
             <div
               className="about-row flex flex-col md:flex-row"
-              style={{ gap: 64, alignItems: "stretch" }}
+              style={{ gap: 48, alignItems: "stretch" }}
             >
-              {/* Left column: heading + photo */}
-              <div style={{ flexShrink: 0, width: "100%", maxWidth: 340 }}>
+              {/* Left column: heading + photo slider */}
+              <div style={{ flexShrink: 0, width: "100%", maxWidth: 480 }}>
                 <h2 className="about-heading" style={HEADING_STYLE}>Dima Melroz</h2>
-                <img
-                  src="/placeholder/about.svg"
-                  alt="Dima Melroz"
+                <div
                   style={{
+                    position: "relative",
                     width: "100%",
-                    maxWidth: 340,
-                    aspectRatio: "3/4",
-                    objectFit: "cover",
-                    display: "block",
+                    maxWidth: 480,
+                    aspectRatio: "4/5",
+                    overflow: "hidden",
                   }}
-                />
+                >
+                  <AnimatePresence initial={false} custom={photoDirection}>
+                    <motion.img
+                      key={ABOUT_PHOTOS[currentPhotoIndex].src}
+                      src={ABOUT_PHOTOS[currentPhotoIndex].src}
+                      alt={ABOUT_PHOTOS[currentPhotoIndex].alt}
+                      custom={photoDirection}
+                      variants={PHOTO_SLIDE_VARIANTS}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                    />
+                  </AnimatePresence>
+                  <button
+                    type="button"
+                    onClick={showPreviousPhoto}
+                    aria-label="Previous about photo"
+                    style={{
+                      position: "absolute",
+                      left: 10,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      width: 38,
+                      height: 38,
+                      borderRadius: 999,
+                      border: 0,
+                      background: "rgba(0,0,0,0.35)",
+                      color: "white",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ChevronLeft size={24} strokeWidth={3} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={showNextPhoto}
+                    aria-label="Next about photo"
+                    style={{
+                      position: "absolute",
+                      right: 10,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      width: 38,
+                      height: 38,
+                      borderRadius: 999,
+                      border: 0,
+                      background: "rgba(0,0,0,0.35)",
+                      color: "white",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ChevronRight size={24} strokeWidth={3} />
+                  </button>
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 12,
+                      bottom: 12,
+                      padding: "4px 7px",
+                      borderRadius: 999,
+                      background: "rgba(0,0,0,0.35)",
+                      color: "rgba(255,255,255,0.85)",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      lineHeight: 1,
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    {currentPhotoIndex + 1} / {ABOUT_PHOTOS.length}
+                  </div>
+                </div>
               </div>
 
               {/* Right column: invisible spacer → bio → contacts pinned to bottom */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", maxWidth: 560 }}>
                 {/* Invisible heading spacer — mirrors left heading height exactly */}
                 <h2
                   aria-hidden="true"
@@ -109,19 +228,19 @@ export function AboutOverlay() {
                 <div
                   style={{
                     color: "rgba(245,247,250,0.85)",
-                    fontSize: "1.0625rem",
-                    lineHeight: 1.7,
+                    fontSize: "1rem",
+                    lineHeight: 1.65,
                   }}
                 >
                   <p style={{ marginBottom: 18 }}>
-                    Привет, я Дима Melroz – режиссёр. Уже 7 лет снимаю рекламу,
-                    клипы, шоу и бренд-контент. Базируюсь в Москве, но работаю
-                    с проектами по всей России.
+                    Привет, я Дима Melroz – режиссёр, креативный продюсер.
+                    Уже 7 лет снимаю рекламу, клипы, шоу и бренд-контент.
+                    Базируюсь в Москве, но работаю по всей России.
                   </p>
                   <p style={{ marginBottom: 18 }}>
                     Мне интересно соединять яркую визуальную эстетику с точной
-                    формой, ритмом и интонацией проекта – чтобы видео не просто
-                    выглядело красиво, а работало на идею и зрительское вовлечение.
+                    формой, ритмом и интонацией проекта – чтобы видео работало
+                    на идею и зрительское вовлечение.
                   </p>
                   <p style={{ marginBottom: 18 }}>
                     У меня высшее образование в маркетинге и дополнительное обучение во ВГИКе
@@ -129,7 +248,7 @@ export function AboutOverlay() {
                     задачи бренда, продакшена и команды.
                   </p>
                   <p>
-                    Открыт к диалогу, экспериментам и поиску сильных решений вместе с командой.
+                    Открыт к диалогу, экспериментам и поиску сильных решений вместе с командой!
                   </p>
                 </div>
 
@@ -139,8 +258,8 @@ export function AboutOverlay() {
                   style={{ marginTop: "auto", paddingTop: 32, gap: 24 }}
                 >
                   {[
-                    { icon: <FaTelegramPlane size={24} />, label: "Telegram", href: "https://t.me/" },
-                    { icon: <FaInstagram size={24} />, label: "Instagram", href: "https://instagram.com/" },
+                    { icon: <FaTelegramPlane size={24} />, label: "Telegram", href: "http://t.me/melrozay" },
+                    { icon: <FaInstagram size={24} />, label: "Instagram", href: "https://www.instagram.com/dima.melroz/" },
                     { icon: <FaVimeoV size={24} />, label: "Vimeo", href: "https://vimeo.com/" },
                   ].map(({ icon, label, href }) => (
                     <a

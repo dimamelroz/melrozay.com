@@ -63,8 +63,8 @@ export default function HomePage() {
         }}
       >
         {[
-          { icon: <FaTelegramPlane size={22} />, label: "Telegram", href: "https://t.me/" },
-          { icon: <FaInstagram size={22} />, label: "Instagram", href: "https://instagram.com/" },
+          { icon: <FaTelegramPlane size={22} />, label: "Telegram", href: "http://t.me/melrozay" },
+          { icon: <FaInstagram size={22} />, label: "Instagram", href: "https://www.instagram.com/dima.melroz/" },
           { icon: <FaVimeoV size={22} />, label: "Vimeo", href: "https://vimeo.com/" },
         ].map(({ icon, label, href }) => (
           <a
