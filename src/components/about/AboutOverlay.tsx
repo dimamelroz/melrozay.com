@@ -258,7 +258,7 @@ export function AboutOverlay() {
                   style={{ marginTop: "auto", paddingTop: 32, gap: 24 }}
                 >
                   {[
-                    { icon: <FaTelegramPlane size={24} />, label: "Telegram", href: "http://t.me/melrozay" },
+                    { icon: <FaTelegramPlane size={24} />, label: "Telegram", href: "https://t.me/melrozay" },
                     { icon: <FaInstagram size={24} />, label: "Instagram", href: "https://www.instagram.com/dima.melroz/" },
                     { icon: <FaVimeoV size={24} />, label: "Vimeo", href: "https://vimeo.com/" },
                   ].map(({ icon, label, href }) => (

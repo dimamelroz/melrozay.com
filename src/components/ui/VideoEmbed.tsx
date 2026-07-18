@@ -37,6 +37,7 @@ export function VideoEmbed({
       allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
       allowFullScreen
       referrerPolicy="strict-origin-when-cross-origin"
+      sandbox="allow-scripts allow-same-origin allow-presentation"
       style={{ border: "none", display: "block" }}
     />
   );
