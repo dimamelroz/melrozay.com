@@ -5,17 +5,24 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { HeroVideo } from "@/components/hero/HeroVideo";
 import { ScrollIndicator } from "@/components/hero/ScrollIndicator";
+import { useFilter } from "@/context/FilterContext";
 import { FaTelegramPlane, FaInstagram, FaVimeoV } from "react-icons/fa";
 
 export default function HomePage() {
   const router = useRouter();
+  const { setActiveFilter } = useFilter();
   const [leaving, setLeaving] = useState(false);
 
   const goToWorks = useCallback(() => {
     if (leaving) return;
+    setActiveFilter("all");
     setLeaving(true);
     setTimeout(() => router.push("/works"), 500);
-  }, [router, leaving]);
+  }, [router, leaving, setActiveFilter]);
+
+  useEffect(() => {
+    setActiveFilter("all");
+  }, [setActiveFilter]);
 
   useEffect(() => {
     let touchStartY = 0;

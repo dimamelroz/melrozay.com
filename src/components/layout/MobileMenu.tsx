@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useFilter } from "@/context/FilterContext";
 import { useAbout } from "@/context/AboutContext";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
@@ -18,6 +19,8 @@ const FILTER_ITEMS = [
 ];
 
 export function MobileMenu({ open, onClose }: MobileMenuProps) {
+  const pathname = usePathname();
+  const router = useRouter();
   const { activeFilter, setActiveFilter } = useFilter();
   const { setOpen: setAboutOpen } = useAbout();
 
@@ -27,6 +30,9 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
     requestAnimationFrame(() => setActiveFilter(id));
     onClose();
+    if (pathname !== "/works" && pathname !== "/works/") {
+      router.push("/works");
+    }
   };
 
   const handleAbout = () => {

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { playPreviewVideo, wakePreviewVideos } from "@/lib/previewVideos";
 import type { Work } from "@/types/work";
 
 interface WorkCardProps {
@@ -9,6 +11,7 @@ interface WorkCardProps {
 }
 
 export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const roleLabel = work.role.toLocaleLowerCase("ru-RU");
   const projectTypeLabel = work.projectType.toLocaleLowerCase("ru-RU");
   const hasHeadline = Boolean(work.headline);
@@ -16,6 +19,9 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
   const subtitleLabel = hasHeadline
     ? work.subtitle
     : work.subtitle?.toLocaleUpperCase("ru-RU");
+  const previewVideoSrc = work.previewVideo
+    ? `${work.previewVideo}?v=noaudio-2`
+    : undefined;
 
   const wrapperClass =
     forcedAspect === "fill"
@@ -23,6 +29,28 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       : forcedAspect === "16/9"
       ? "w-full aspect-video"
       : "w-full aspect-[9/16]";
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const playPreview = () => {
+      playPreviewVideo(video);
+    };
+
+    playPreview();
+    video.addEventListener("loadedmetadata", playPreview);
+    video.addEventListener("canplay", playPreview);
+    window.addEventListener("pageshow", playPreview);
+    document.addEventListener("visibilitychange", playPreview);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", playPreview);
+      video.removeEventListener("canplay", playPreview);
+      window.removeEventListener("pageshow", playPreview);
+      document.removeEventListener("visibilitychange", playPreview);
+    };
+  }, [work.previewVideo]);
 
   return (
     <div
@@ -32,20 +60,27 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
+          wakePreviewVideos();
           onClick();
         }
       }}
+      onPointerDownCapture={wakePreviewVideos}
+      onTouchStartCapture={wakePreviewVideos}
       className={`${wrapperClass} relative overflow-hidden cursor-pointer group focus-visible:outline focus-visible:outline-2 focus-visible:outline-white`}
     >
       {/* Cover — video preview if available, otherwise image */}
-      {work.previewVideo ? (
+      {previewVideoSrc ? (
         <video
-          src={work.previewVideo}
+          ref={videoRef}
+          src={previewVideoSrc}
           autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          controls={false}
+          preload="auto"
+          data-preview-video="true"
+          disablePictureInPicture
           className="w-full h-full object-cover"
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
@@ -75,7 +110,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
 
       {/* Role — top-right, pointer-events-none */}
       <span
-        className="absolute top-3 right-3 text-xs text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        className="absolute top-4 right-4 md:top-3 md:right-3 text-xs text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
         style={{ letterSpacing: "-0.035em" }}
       >
         {roleLabel}
@@ -83,7 +118,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
 
       {/* Title — bottom-left, pointer-events-none */}
       <div
-        className="absolute bottom-3 left-3 flex flex-col text-xs text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        className="absolute bottom-4 left-4 md:bottom-3 md:left-3 flex flex-col text-xs text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
         style={{ letterSpacing: "-0.035em", lineHeight: 1.05, gap: 1 }}
       >
         {hasHeadline && (
@@ -111,7 +146,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
 
       {/* ProjectType — bottom-right, pointer-events-none */}
       <span
-        className="absolute bottom-3 right-3 text-xs text-white opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+        className="absolute bottom-4 right-4 md:bottom-3 md:right-3 text-xs text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
         style={{ letterSpacing: "-0.035em" }}
       >
         {projectTypeLabel}

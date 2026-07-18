@@ -36,6 +36,7 @@ export function Header() {
         {/* Brand name */}
         <Link
           href="/"
+          onClick={() => setActiveFilter("all")}
           className="text-white font-bold no-underline"
           style={{ fontSize: "clamp(20px, 2.5vw, 24px)", letterSpacing: "-0.04em" }}
         >
