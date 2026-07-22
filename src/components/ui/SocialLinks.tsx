@@ -1,4 +1,4 @@
-import { FaTelegramPlane, FaInstagram, FaVimeoV } from "react-icons/fa";
+import { FaTelegramPlane, FaInstagram } from "react-icons/fa";
 
 type SocialLinksTone = "home" | "about" | "works";
 
@@ -17,7 +17,6 @@ const TONE_CLASS: Record<SocialLinksTone, string> = {
 const SOCIAL_LINKS = [
   { icon: FaTelegramPlane, label: "Telegram", href: "https://t.me/melrozay" },
   { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/dima.melroz/" },
-  { icon: FaVimeoV, label: "Vimeo", href: "https://vimeo.com/" },
 ];
 
 export function SocialLinks({ size = 22, gap = 20, tone = "home" }: SocialLinksProps) {
