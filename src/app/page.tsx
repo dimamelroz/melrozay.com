@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { HeroVideo } from "@/components/hero/HeroVideo";
 import { ScrollIndicator } from "@/components/hero/ScrollIndicator";
+import { SocialLinks } from "@/components/ui/SocialLinks";
 import { useFilter } from "@/context/FilterContext";
-import { FaTelegramPlane, FaInstagram, FaVimeoV } from "react-icons/fa";
 
 export default function HomePage() {
   const router = useRouter();
@@ -69,28 +69,7 @@ export default function HomePage() {
           pointerEvents: "auto",
         }}
       >
-        {[
-          { icon: <FaTelegramPlane size={22} />, label: "Telegram", href: "https://t.me/melrozay" },
-          { icon: <FaInstagram size={22} />, label: "Instagram", href: "https://www.instagram.com/dima.melroz/" },
-          { icon: <FaVimeoV size={22} />, label: "Vimeo", href: "https://vimeo.com/" },
-        ].map(({ icon, label, href }) => (
-          <a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={label}
-            style={{
-              color: "rgba(255,255,255,0.8)",
-              display: "flex",
-              alignItems: "center",
-              transition: "color 150ms",
-            }}
-            className="hover:text-white"
-          >
-            {icon}
-          </a>
-        ))}
+        <SocialLinks size={22} gap={20} tone="home" />
       </div>
     </motion.main>
   );

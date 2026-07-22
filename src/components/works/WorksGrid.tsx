@@ -92,7 +92,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
           >
             <WorkCard
               work={work}
-              onClick={() => onOpen(work)}
+              onClick={work.fullVideo ? () => onOpen(work) : undefined}
               forcedAspect={work.orientation === "horizontal" ? "16/9" : "9/16"}
             />
           </div>
@@ -135,7 +135,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
         >
           <WorkCard
             work={item.work}
-            onClick={() => onOpen(item.work)}
+            onClick={item.work.fullVideo ? () => onOpen(item.work) : undefined}
             forcedAspect={rowHeightPx > 0 ? "fill" : (item.work.orientation === "horizontal" ? "16/9" : "9/16")}
           />
         </div>

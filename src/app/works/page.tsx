@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { WorksGrid } from "@/components/works/WorksGrid";
 import { VideoLightbox } from "@/components/works/VideoLightbox";
 import { MarqueeFooter } from "@/components/works/MarqueeFooter";
+import { SocialLinks } from "@/components/ui/SocialLinks";
 import { WORKS } from "@/data/works";
 import { useFilter } from "@/context/FilterContext";
 import { wakePreviewVideos } from "@/lib/previewVideos";
@@ -92,6 +93,13 @@ export default function WorksPage() {
               rgba(0, 0, 0, 0) 100%
             );
           }
+          .works-footer-meta {
+            align-items: center !important;
+            bottom: 16px !important;
+          }
+          .works-footer-links {
+            gap: 20px !important;
+          }
         }
       `}</style>
       <div className="works-mobile-top-mask" />
@@ -102,21 +110,46 @@ export default function WorksPage() {
         <div style={{ position: "relative", minHeight: "clamp(80px, 14vw, 200px)" }}>
           {showMarquee && <MarqueeFooter />}
           <div
+            className="works-footer-meta"
             style={{
               position: "absolute",
+              left: "clamp(16px, 3vw, 40px)",
               right: "clamp(16px, 3vw, 40px)",
               bottom: "clamp(12px, 2vw, 24px)",
               zIndex: 2,
-              color: "rgba(255,255,255,0.45)",
-              fontSize: "10px",
-              fontWeight: 700,
-              letterSpacing: "-0.035em",
-              lineHeight: 1,
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "flex-end",
+              gap: 24,
               pointerEvents: "none",
-              whiteSpace: "nowrap",
             }}
           >
-            ручная работа нейросети
+            <span
+              style={{
+                color: "rgba(255,255,255,0.45)",
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+                whiteSpace: "nowrap",
+              }}
+            >
+              ручная работа нейросети
+            </span>
+            <div
+              className="works-footer-links"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 20,
+                pointerEvents: "auto",
+              }}
+            >
+              <SocialLinks size={22} gap={20} tone="works" />
+            </div>
           </div>
         </div>
       </main>

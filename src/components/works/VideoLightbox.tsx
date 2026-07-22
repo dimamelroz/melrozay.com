@@ -44,7 +44,7 @@ export function VideoLightbox({ work, onClose }: VideoLightboxProps) {
 
   return createPortal(
     <AnimatePresence>
-      {work && (
+      {work?.fullVideo && (
         <motion.div
           key="lightbox"
           initial={{ opacity: 0 }}

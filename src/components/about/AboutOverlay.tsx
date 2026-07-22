@@ -4,18 +4,10 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { FaTelegramPlane, FaInstagram, FaVimeoV } from "react-icons/fa";
 import { useAbout } from "@/context/AboutContext";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
-
-const HEADING_STYLE = {
-  fontSize: "clamp(48px, 6vw, 72px)",
-  fontWeight: 700,
-  marginBottom: "24px",
-  color: "white",
-  letterSpacing: "-0.04em",
-  whiteSpace: "nowrap",
-} as const;
+import { NameMarquee } from "@/components/ui/NameMarquee";
+import { SocialLinks } from "@/components/ui/SocialLinks";
 
 const ABOUT_PHOTOS = [
   { src: "/about/dima-about-main.jpg", alt: "Dima Melroz" },
@@ -90,38 +82,85 @@ export function AboutOverlay() {
           {/* Close button */}
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-6 right-6 text-white/70 hover:text-white transition-opacity cursor-pointer bg-transparent border-none z-10"
+            className="about-close-button absolute text-white/70 hover:text-white transition-opacity cursor-pointer border-none z-20"
             aria-label="Close about"
           >
-            <X size={32} />
+            <X size={30} />
           </button>
+
+          <div className="about-marquee" onClick={(e) => e.stopPropagation()}>
+            <NameMarquee
+              fontSize="clamp(42px, 7.4vw, 104px)"
+              paddingTop="0"
+              paddingBottom="0"
+              speed={46}
+            />
+          </div>
 
           {/* Content */}
           <div
-            className="about-container max-w-6xl mx-auto px-8 pt-10 pb-20"
+            className="about-container max-w-7xl mx-auto px-8 pb-6"
             onClick={(e) => e.stopPropagation()}
           >
             <style>{`
+              .about-close-button {
+                top: clamp(116px, 12vw, 168px);
+                right: 24px;
+                width: 34px;
+                height: 34px;
+                border-radius: 999px;
+                background: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              .about-marquee {
+                width: 100%;
+                overflow: hidden;
+                padding-top: 4px;
+                margin-bottom: 10px;
+              }
+              .about-photo-frame {
+                height: min(68vh, 680px);
+              }
+              .about-copy {
+                color: rgba(245,247,250,0.82);
+                font-size: 1rem;
+                line-height: 1.65;
+                letter-spacing: -0.035em;
+              }
+              .about-copy p {
+                margin-bottom: 18px;
+              }
+              .about-copy p:last-child {
+                margin-bottom: 0;
+              }
+              .about-copy strong {
+                color: rgba(255,255,255,0.96);
+                font-weight: 600;
+              }
               @media (max-width: 767px) {
                 .about-spacer { display: none !important; }
-                .about-container { padding-top: 24px !important; padding-bottom: 32px !important; }
-                .about-heading { margin-bottom: 16px !important; line-height: 0.9 !important; margin-top: -10px !important; }
+                .about-container { padding-top: 0 !important; padding-bottom: 32px !important; }
+                .about-marquee { padding-top: 10px !important; margin-bottom: 10px !important; }
+                .about-close-button { top: 72px !important; right: 18px !important; width: 34px !important; height: 34px !important; }
+                .about-photo-frame { height: auto !important; }
                 .about-row { gap: 20px !important; }
               }
             `}</style>
             {/* Two-column row */}
             <div
               className="about-row flex flex-col md:flex-row"
-              style={{ gap: 48, alignItems: "stretch" }}
+              style={{ gap: 56, alignItems: "stretch" }}
             >
               {/* Left column: heading + photo slider */}
-              <div style={{ flexShrink: 0, width: "100%", maxWidth: 480 }}>
-                <h2 className="about-heading" style={HEADING_STYLE}>Dima Melroz</h2>
+              <div style={{ flexShrink: 0, width: "100%", maxWidth: 560 }}>
                 <div
+                  className="about-photo-frame"
                   style={{
                     position: "relative",
                     width: "100%",
-                    maxWidth: 480,
+                    maxWidth: 560,
                     aspectRatio: "4/5",
                     overflow: "hidden",
                   }}
@@ -214,71 +253,39 @@ export function AboutOverlay() {
               </div>
 
               {/* Right column: invisible spacer → bio → contacts pinned to bottom */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", maxWidth: 560 }}>
-                {/* Invisible heading spacer — mirrors left heading height exactly */}
-                <h2
-                  aria-hidden="true"
-                  className="about-spacer"
-                  style={{ ...HEADING_STYLE, visibility: "hidden" }}
-                >
-                  Dima Melroz
-                </h2>
-
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", maxWidth: 600 }}>
                 {/* Bio */}
-                <div
-                  style={{
-                    color: "rgba(245,247,250,0.85)",
-                    fontSize: "1rem",
-                    lineHeight: 1.65,
-                  }}
-                >
-                  <p style={{ marginBottom: 18 }}>
-                    привет, я Дима Melroz – режиссёр, креативный продюсер.
-                    уже 7 лет снимаю рекламу, клипы, шоу и бренд-контент.
-                    базируюсь в Москве, но работаю по всей России.
-                  </p>
-                  <p style={{ marginBottom: 18 }}>
-                    мне интересно соединять яркую визуальную эстетику с точной
-                    формой, ритмом и интонацией проекта – чтобы видео работало
-                    на идею и зрительское вовлечение.
-                  </p>
-                  <p style={{ marginBottom: 18 }}>
-                    у меня высшее образование в маркетинге и дополнительное обучение во ВГИКе
-                    по направлению «второй режиссёр». это помогает мне лучше понимать
-                    задачи бренда, продакшена и команды.
+                <div className="about-copy">
+                  <p>
+                    привет, я <strong>Дима Melroz</strong> – режиссёр,
+                    креативный продюсер. уже 7 лет <strong>снимаю рекламу,
+                    клипы, шоу и бренд-контент</strong>. базируюсь в Москве,
+                    но работаю по всей России.
                   </p>
                   <p>
-                    открыт к диалогу, экспериментам и поиску сильных решений вместе с командой!
+                    мне интересно соединять <strong>яркую визуальную эстетику</strong>{" "}
+                    с точной <strong>формой, ритмом и интонацией</strong>{" "}
+                    проекта – чтобы видео работало на идею и зрительское
+                    вовлечение.
+                  </p>
+                  <p>
+                    у меня высшее <strong>образование в маркетинге</strong> и
+                    дополнительное <strong>обучение во ВГИКе</strong> по
+                    направлению «второй режиссёр». это помогает мне лучше
+                    понимать <strong>задачи бренда, продакшена и команды.</strong>
+                  </p>
+                  <p>
+                    открыт к диалогу, экспериментам и поиску сильных решений
+                    вместе с командой!
                   </p>
                 </div>
 
                 {/* Contacts pinned to bottom of column */}
                 <div
                   className="flex flex-wrap"
-                  style={{ marginTop: "auto", paddingTop: 32, gap: 24 }}
+                  style={{ marginTop: "auto", paddingTop: 32 }}
                 >
-                  {[
-                    { icon: <FaTelegramPlane size={24} />, label: "Telegram", href: "https://t.me/melrozay" },
-                    { icon: <FaInstagram size={24} />, label: "Instagram", href: "https://www.instagram.com/dima.melroz/" },
-                    { icon: <FaVimeoV size={24} />, label: "Vimeo", href: "https://vimeo.com/" },
-                  ].map(({ icon, label, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      style={{
-                        color: "rgba(255,255,255,0.7)",
-                        display: "flex",
-                        alignItems: "center",
-                        transition: "color 150ms",
-                      }}
-                      className="hover:text-white"
-                    >
-                      {icon}
-                    </a>
-                  ))}
+                  <SocialLinks size={26} gap={24} tone="about" />
                 </div>
               </div>
             </div>

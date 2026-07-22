@@ -6,12 +6,13 @@ import type { Work } from "@/types/work";
 
 interface WorkCardProps {
   work: Work;
-  onClick: () => void;
+  onClick?: () => void;
   forcedAspect: "16/9" | "9/16" | "fill";
 }
 
 export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canOpen = Boolean(onClick && work.fullVideo);
   const roleLabel = work.role.toLocaleLowerCase("ru-RU");
   const projectTypeLabel = work.projectType.toLocaleLowerCase("ru-RU");
   const hasHeadline = Boolean(work.headline);
@@ -54,19 +55,20 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
 
   return (
     <div
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
+      role={canOpen ? "button" : undefined}
+      tabIndex={canOpen ? 0 : undefined}
+      onClick={canOpen ? onClick : undefined}
       onKeyDown={(e) => {
+        if (!canOpen) return;
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           wakePreviewVideos();
-          onClick();
+          onClick?.();
         }
       }}
       onPointerDownCapture={wakePreviewVideos}
       onTouchStartCapture={wakePreviewVideos}
-      className={`${wrapperClass} relative overflow-hidden cursor-pointer group focus-visible:outline focus-visible:outline-2 focus-visible:outline-white`}
+      className={`${wrapperClass} relative overflow-hidden ${canOpen ? "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-white" : "cursor-default"} group`}
     >
       {/* Cover — video preview if available, otherwise image */}
       {previewVideoSrc ? (

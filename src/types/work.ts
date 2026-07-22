@@ -12,5 +12,5 @@ export interface Work {
   orientation: WorkOrientation;
   cover: string;
   previewVideo?: string;
-  fullVideo: { provider: VideoProvider; id: string };
+  fullVideo?: { provider: VideoProvider; id: string };
 }
