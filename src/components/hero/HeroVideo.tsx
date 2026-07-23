@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
-  const posterSrc = "/posters/showreel4-handbrake.mp4.jpg";
+  const posterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-1";
 
   useEffect(() => {
     const v = videoRef.current;

@@ -45,6 +45,13 @@ export function AboutOverlay() {
   }, []);
 
   useEffect(() => {
+    ABOUT_PHOTOS.forEach((photo) => {
+      const image = new Image();
+      image.src = photo.src;
+    });
+  }, []);
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
       if (e.key === "ArrowLeft") showPreviousPhoto();
@@ -170,6 +177,8 @@ export function AboutOverlay() {
                       key={ABOUT_PHOTOS[currentPhotoIndex].src}
                       src={ABOUT_PHOTOS[currentPhotoIndex].src}
                       alt={ABOUT_PHOTOS[currentPhotoIndex].alt}
+                      loading="eager"
+                      decoding="async"
                       custom={photoDirection}
                       variants={PHOTO_SLIDE_VARIANTS}
                       initial="enter"
