@@ -25,6 +25,21 @@ export function Header() {
 
   return (
     <>
+      <style>{`
+        @keyframes works-filter-enter {
+          from {
+            opacity: 0;
+            transform: translate(-50%, calc(-50% - 18px));
+          }
+          to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+          }
+        }
+        .works-filter-controls {
+          animation: works-filter-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+      `}</style>
       <header
         className="fixed top-0 left-0 right-0 z-[90] flex items-center justify-between"
         style={{
@@ -47,12 +62,16 @@ export function Header() {
         {/* Filter segmented control — absolutely centered, desktop only, /works only */}
         {isWorks && (
           <LayoutGroup id="filter">
-            <motion.div
-              initial={false}
-              animate={{ x: "-50%", y: "-50%", opacity: 1 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden md:flex items-center"
-              style={{ position: "absolute", left: "50%", top: "50%", pointerEvents: "auto" }}
+            <div
+              className="works-filter-controls hidden md:flex items-center"
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                opacity: 1,
+                transform: "translate(-50%, -50%)",
+                pointerEvents: "auto",
+              }}
             >
               {FILTERS.map((f) => (
                 <button
@@ -94,7 +113,7 @@ export function Header() {
                   </span>
                 </button>
               ))}
-            </motion.div>
+            </div>
           </LayoutGroup>
         )}
 

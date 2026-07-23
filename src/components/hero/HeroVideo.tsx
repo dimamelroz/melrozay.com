@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
+  const posterSrc = "/posters/showreel4-handbrake.mp4.jpg";
 
   useEffect(() => {
     const v = videoRef.current;
@@ -21,6 +23,11 @@ export function HeroVideo() {
 
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
+      <img
+        src={posterSrc}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover"
+      />
       <video
         ref={videoRef}
         src="/works/showreel4-handbrake.mp4"
@@ -29,9 +36,16 @@ export function HeroVideo() {
         loop
         playsInline
         preload="auto"
-        poster="/placeholder/hero-poster.svg"
-        className="w-full h-full object-cover"
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        poster={posterSrc}
+        onLoadedData={() => setVideoReady(true)}
+        onCanPlay={() => setVideoReady(true)}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: videoReady ? 1 : 0,
+        }}
       />
       <div
         className="absolute inset-0 pointer-events-none"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { playPreviewVideo, wakePreviewVideos } from "@/lib/previewVideos";
 import type { Work } from "@/types/work";
 
@@ -12,6 +12,7 @@ interface WorkCardProps {
 
 export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoReady, setVideoReady] = useState(false);
   const canOpen = Boolean(onClick && work.fullVideo);
   const roleLabel = work.role.toLocaleLowerCase("ru-RU");
   const projectTypeLabel = work.projectType.toLocaleLowerCase("ru-RU");
@@ -23,6 +24,9 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
   const previewVideoSrc = work.previewVideo
     ? `${work.previewVideo}?v=noaudio-2`
     : undefined;
+  const posterSrc = work.previewVideo
+    ? `/posters/${work.previewVideo.split("/").pop()}.jpg`
+    : work.cover;
 
   const wrapperClass =
     forcedAspect === "fill"
@@ -70,8 +74,14 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       onTouchStartCapture={wakePreviewVideos}
       className={`${wrapperClass} relative overflow-hidden ${canOpen ? "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-white" : "cursor-default"} group`}
     >
-      {/* Cover — video preview if available, otherwise image */}
-      {previewVideoSrc ? (
+      <img
+        src={posterSrc}
+        alt={work.subtitle ?? work.headline ?? ""}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {previewVideoSrc && (
         <video
           ref={videoRef}
           src={previewVideoSrc}
@@ -81,17 +91,18 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
           playsInline
           controls={false}
           preload="auto"
+          poster={posterSrc}
           data-preview-video="true"
           disablePictureInPicture
-          className="w-full h-full object-cover"
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      ) : (
-        <img
-          src={work.cover}
-          alt={work.subtitle ?? work.headline ?? ""}
-          loading="lazy"
-          className="w-full h-full object-cover"
+          onLoadedData={() => setVideoReady(true)}
+          onCanPlay={() => setVideoReady(true)}
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: videoReady ? 1 : 0,
+          }}
         />
       )}
 
