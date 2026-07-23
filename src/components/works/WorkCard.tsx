@@ -35,6 +35,15 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       ? "w-full aspect-video"
       : "w-full aspect-[9/16]";
 
+  const handleVideoReady = () => {
+    const video = videoRef.current;
+    if (!videoReady && video && video.currentTime > 0.05) {
+      video.currentTime = 0;
+    }
+    setVideoReady(true);
+    if (video) playPreviewVideo(video);
+  };
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -94,8 +103,8 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
           poster={posterSrc}
           data-preview-video="true"
           disablePictureInPicture
-          onLoadedData={() => setVideoReady(true)}
-          onCanPlay={() => setVideoReady(true)}
+          onLoadedData={handleVideoReady}
+          onCanPlay={handleVideoReady}
           className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
           style={{
             width: "100%",

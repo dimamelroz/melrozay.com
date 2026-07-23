@@ -21,6 +21,17 @@ export function HeroVideo() {
     return () => v.removeEventListener("canplay", tryPlay);
   }, []);
 
+  const handleVideoReady = () => {
+    const video = videoRef.current;
+    if (!videoReady && video && video.currentTime > 0.05) {
+      video.currentTime = 0;
+    }
+    setVideoReady(true);
+    video?.play().catch(() => {
+      // Autoplay may be blocked until interaction; ignore.
+    });
+  };
+
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
       <img
@@ -37,8 +48,8 @@ export function HeroVideo() {
         playsInline
         preload="auto"
         poster={posterSrc}
-        onLoadedData={() => setVideoReady(true)}
-        onCanPlay={() => setVideoReady(true)}
+        onLoadedData={handleVideoReady}
+        onCanPlay={handleVideoReady}
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
         style={{
           width: "100%",
