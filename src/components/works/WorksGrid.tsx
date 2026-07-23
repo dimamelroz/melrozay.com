@@ -51,9 +51,10 @@ interface WorksGridProps {
 }
 
 export function WorksGrid({ works, onOpen }: WorksGridProps) {
-  // Default 1 — safe for mobile SSR/hydration; corrected to 2/3 by effect on desktop
+  // The first render uses a CSS fallback grid so desktop never starts as one huge mobile column.
   const [columns, setColumns] = useState<1 | 2 | 3>(1);
   const [rowHeightPx, setRowHeightPx] = useState(0);
+  const [hasMeasured, setHasMeasured] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,7 +67,10 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
         const containerWidth = el ? el.getBoundingClientRect().width : vw;
         const cellWidth = (containerWidth - (cols - 1) * GAP_PX) / cols;
         setRowHeightPx((cellWidth * 9) / 16);
+      } else {
+        setRowHeightPx(0);
       }
+      setHasMeasured(true);
     };
     updateLayout();
     const raf = requestAnimationFrame(updateLayout);
@@ -78,6 +82,42 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
   }, []);
 
   const gridKey = works.map((w) => w.id).join(",");
+
+  if (!hasMeasured) {
+    return (
+      <div
+        key={gridKey}
+        className="works-grid-fallback"
+        style={{
+          display: "grid",
+          gap: `${GAP_PX}px`,
+        }}
+      >
+        <style>{`${ANIM_STYLE}
+          .works-grid-fallback { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+          @media (max-width: 1023px) {
+            .works-grid-fallback { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          }
+          @media (max-width: 767px) {
+            .works-grid-fallback { grid-template-columns: 1fr; }
+          }
+        `}</style>
+        {works.map((work, index) => (
+          <div
+            key={`${gridKey}-${work.id}`}
+            className="work-item"
+            style={{ animationDelay: `${Math.min(index, 12) * 0.05}s` }}
+          >
+            <WorkCard
+              work={work}
+              onClick={work.fullVideo ? () => onOpen(work) : undefined}
+              forcedAspect={work.orientation === "horizontal" ? "16/9" : "9/16"}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   // Mobile: pure CSS, no JS measurement dependency
   if (columns === 1) {
