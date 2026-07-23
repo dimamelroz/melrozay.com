@@ -31,6 +31,7 @@ export function Header() {
           height: "var(--header-height)",
           paddingLeft: "clamp(16px, 3vw, 24px)",
           paddingRight: "clamp(16px, 3vw, 24px)",
+          pointerEvents: "auto",
         }}
       >
         {/* Brand name */}
@@ -47,11 +48,11 @@ export function Header() {
         {isWorks && (
           <LayoutGroup id="filter">
             <motion.div
-              initial={{ x: "-50%", y: "calc(-50% - 24px)", opacity: 0 }}
+              initial={false}
               animate={{ x: "-50%", y: "-50%", opacity: 1 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="hidden md:flex items-center"
-              style={{ position: "absolute", left: "50%", top: "50%" }}
+              style={{ position: "absolute", left: "50%", top: "50%", pointerEvents: "auto" }}
             >
               {FILTERS.map((f) => (
                 <button
