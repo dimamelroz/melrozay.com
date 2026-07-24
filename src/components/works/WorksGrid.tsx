@@ -35,13 +35,13 @@ function computeLayout(works: Work[], columns: 2 | 3): LayoutItem[] {
 }
 
 const ANIM_STYLE = `
-  @keyframes work-fade-in-a {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  @keyframes work-slide-up-a {
+    from { opacity: 0; transform: translateY(90px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  @keyframes work-fade-in-b {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  @keyframes work-slide-up-b {
+    from { opacity: 0; transform: translateY(90px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   .work-item {
     opacity: 1;
@@ -67,7 +67,7 @@ export function WorksGrid({ works, onOpen, activeFilter = "all", animationKey }:
       ? works
       : works.filter((work) => work.filterGroup === activeFilter);
   const visibleIds = new Set(visibleWorks.map((work) => work.id));
-  const animationName = animationCycle % 2 === 0 ? "work-fade-in-a" : "work-fade-in-b";
+  const animationName = animationCycle % 2 === 0 ? "work-slide-up-a" : "work-slide-up-b";
 
   useEffect(() => {
     setAnimationCycle((cycle) => cycle + 1);
@@ -104,6 +104,7 @@ export function WorksGrid({ works, onOpen, activeFilter = "all", animationKey }:
         style={{
           display: "grid",
           gap: `${GAP_PX}px`,
+          visibility: "hidden",
         }}
       >
         <style>{`${ANIM_STYLE}
@@ -154,8 +155,8 @@ export function WorksGrid({ works, onOpen, activeFilter = "all", animationKey }:
               isVisible
                 ? {
                     animationName,
-                    animationDuration: "0.45s",
-                    animationTimingFunction: "ease",
+                    animationDuration: "1.05s",
+                    animationTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
                     animationFillMode: "forwards",
                     animationDelay: `${Math.min(index, 12) * 0.05}s`,
                   }
@@ -218,8 +219,8 @@ export function WorksGrid({ works, onOpen, activeFilter = "all", animationKey }:
       // Cards before rowHeight is measured: use natural aspect so they're visible
       aspectRatio: rowHeightPx > 0 ? undefined : (work.orientation === "horizontal" ? "16/9" : "9/16"),
       animationName,
-      animationDuration: "0.45s",
-      animationTimingFunction: "ease",
+      animationDuration: "1.05s",
+      animationTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
       animationFillMode: "forwards",
       animationDelay: `${Math.min(item.gridRow - 1, 8) * 0.12 + (item.gridColumn - 1) * 0.06}s`,
     };
