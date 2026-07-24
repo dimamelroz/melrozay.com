@@ -81,12 +81,9 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
     };
   }, []);
 
-  const gridKey = works.map((w) => w.id).join(",");
-
   if (!hasMeasured) {
     return (
       <div
-        key={gridKey}
         className="works-grid-fallback"
         style={{
           display: "grid",
@@ -104,7 +101,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
         `}</style>
         {works.map((work, index) => (
           <div
-            key={`${gridKey}-${work.id}`}
+            key={work.id}
             className="work-item"
             style={{ animationDelay: `${Math.min(index, 12) * 0.05}s` }}
           >
@@ -122,11 +119,11 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
   // Mobile: pure CSS, no JS measurement dependency
   if (columns === 1) {
     return (
-      <div key={gridKey} style={{ display: "flex", flexDirection: "column", gap: `${GAP_PX}px` }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: `${GAP_PX}px` }}>
         <style>{ANIM_STYLE}</style>
         {works.map((work, index) => (
           <div
-            key={`${gridKey}-${work.id}`}
+            key={work.id}
             className="work-item"
             style={{ animationDelay: `${Math.min(index, 12) * 0.05}s` }}
           >
@@ -151,7 +148,6 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
 
   return (
     <div
-      key={gridKey}
       ref={containerRef}
       style={{
         display: "grid",
@@ -163,7 +159,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
       <style>{ANIM_STYLE}</style>
       {sortedItems.map((item) => (
         <div
-          key={`${gridKey}-${item.work.id}`}
+          key={item.work.id}
           className="work-item"
           style={{
             gridColumn: item.gridColumn,
