@@ -35,13 +35,13 @@ function computeLayout(works: Work[], columns: 2 | 3): LayoutItem[] {
 }
 
 const ANIM_STYLE = `
-  @keyframes work-fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+  @keyframes work-slide-up {
+    from { transform: translateY(120px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
   }
   .work-item {
     opacity: 0;
-    animation: work-fade-in 0.45s ease forwards;
+    animation: work-slide-up 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 `;
 
@@ -56,6 +56,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
   const [rowHeightPx, setRowHeightPx] = useState(0);
   const [hasMeasured, setHasMeasured] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const gridKey = works.map((w) => w.id).join(",");
 
   useEffect(() => {
     const updateLayout = () => {
@@ -84,6 +85,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
   if (!hasMeasured) {
     return (
       <div
+        key={gridKey}
         className="works-grid-fallback"
         style={{
           display: "grid",
@@ -119,7 +121,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
   // Mobile: pure CSS, no JS measurement dependency
   if (columns === 1) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: `${GAP_PX}px` }}>
+      <div key={gridKey} style={{ display: "flex", flexDirection: "column", gap: `${GAP_PX}px` }}>
         <style>{ANIM_STYLE}</style>
         {works.map((work, index) => (
           <div
@@ -148,6 +150,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
 
   return (
     <div
+      key={gridKey}
       ref={containerRef}
       style={{
         display: "grid",
