@@ -7,7 +7,7 @@ import { MarqueeFooter } from "@/components/works/MarqueeFooter";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { WORKS } from "@/data/works";
 import { useFilter } from "@/context/FilterContext";
-import { wakePreviewVideos } from "@/lib/previewVideos";
+import { wakePreviewVideos, warmPreviewVideoCache } from "@/lib/previewVideos";
 import type { Work } from "@/types/work";
 
 export default function WorksPage() {
@@ -52,6 +52,14 @@ export default function WorksPage() {
       document.removeEventListener("visibilitychange", wake);
     };
   }, [filteredWorks]);
+
+  useEffect(() => {
+    const previewUrls = WORKS
+      .map((work) => work.previewVideo)
+      .filter((url): url is string => Boolean(url));
+
+    return warmPreviewVideoCache(previewUrls);
+  }, []);
 
   return (
     <>

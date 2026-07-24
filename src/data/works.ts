@@ -15,6 +15,17 @@ export const WORKS: Work[] = [
     fullVideo: { provider: "kinescope", id: "7XTaALgJmHEWxLpYKwvjEn" },
   },
   {
+    id: "binatex-volkov",
+    headline: "Александр Волков & Binatex",
+    role: "Director",
+    projectType: "OLV",
+    filterGroup: "commercial",
+    orientation: "horizontal",
+    cover: "/placeholder/work-cover-2.svg",
+    previewVideo: "/works/binatex-preview-handbrake.mp4",
+    fullVideo: { provider: "kinescope", id: "7BBs9RKUapgU7ktmoansFJ" },
+  },
+  {
     id: "wls-ya-tebya-lyublyu",
     headline: "WHOLE LOTTA SWAG",
     subtitle: "Я тебя люблю",
