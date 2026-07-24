@@ -58,10 +58,9 @@ export function warmPreviewVideoCache(urls: string[]) {
   const win = window as IdleWindow;
   const nav = navigator as NetworkAwareNavigator;
   const connection = nav.connection;
-  const isDesktop = win.matchMedia("(min-width: 768px)").matches;
   const isSlowConnection = /2g/.test(connection?.effectiveType ?? "");
 
-  if (!isDesktop || connection?.saveData || isSlowConnection) {
+  if (connection?.saveData || isSlowConnection) {
     return () => undefined;
   }
 
