@@ -15,11 +15,6 @@ export default function WorksPage() {
   const [selectedWork, setSelectedWork] = useState<Work | null>(null);
   const [showMarquee, setShowMarquee] = useState(false);
 
-  const filteredWorks =
-    activeFilter === "all"
-      ? WORKS
-      : WORKS.filter((w) => w.filterGroup === activeFilter);
-
   const handleClose = useCallback(() => {
     wakePreviewVideos();
     setSelectedWork(null);
@@ -105,7 +100,12 @@ export default function WorksPage() {
       <div className="works-mobile-top-mask" />
       <main className="works-enter" style={{ display: "flex", flexDirection: "column", minHeight: "100vh", paddingTop: "var(--header-height)" }}>
         <div style={{ flex: "1 0 auto" }}>
-          <WorksGrid works={filteredWorks} onOpen={setSelectedWork} animationKey={activeFilter} />
+          <WorksGrid
+            works={WORKS}
+            onOpen={setSelectedWork}
+            activeFilter={activeFilter}
+            animationKey={activeFilter}
+          />
         </div>
         <div style={{ position: "relative", minHeight: "clamp(80px, 14vw, 200px)" }}>
           {showMarquee && <MarqueeFooter />}
