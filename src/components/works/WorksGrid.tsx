@@ -40,7 +40,9 @@ const ANIM_STYLE = `
     to   { opacity: 1; }
   }
   .work-item {
-    opacity: 0;
+    opacity: 1;
+  }
+  .work-item.is-revealing {
     animation: work-fade-in 0.45s ease forwards;
   }
 `;
@@ -48,14 +50,22 @@ const ANIM_STYLE = `
 interface WorksGridProps {
   works: Work[];
   onOpen: (work: Work) => void;
+  animationKey?: string;
 }
 
-export function WorksGrid({ works, onOpen }: WorksGridProps) {
+export function WorksGrid({ works, onOpen, animationKey }: WorksGridProps) {
   // The first render uses a CSS fallback grid so desktop never starts as one huge mobile column.
   const [columns, setColumns] = useState<1 | 2 | 3>(1);
   const [rowHeightPx, setRowHeightPx] = useState(0);
   const [hasMeasured, setHasMeasured] = useState(false);
+  const [isRevealing, setIsRevealing] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsRevealing(false);
+    const raf = requestAnimationFrame(() => setIsRevealing(true));
+    return () => cancelAnimationFrame(raf);
+  }, [animationKey]);
 
   useEffect(() => {
     const updateLayout = () => {
@@ -102,7 +112,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
         {works.map((work, index) => (
           <div
             key={work.id}
-            className="work-item"
+            className={`work-item ${isRevealing ? "is-revealing" : ""}`}
             style={{ animationDelay: `${Math.min(index, 12) * 0.05}s` }}
           >
             <WorkCard
@@ -124,7 +134,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
         {works.map((work, index) => (
           <div
             key={work.id}
-            className="work-item"
+            className={`work-item ${isRevealing ? "is-revealing" : ""}`}
             style={{ animationDelay: `${Math.min(index, 12) * 0.05}s` }}
           >
             <WorkCard
@@ -160,7 +170,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
       {sortedItems.map((item) => (
         <div
           key={item.work.id}
-          className="work-item"
+          className={`work-item ${isRevealing ? "is-revealing" : ""}`}
           style={{
             gridColumn: item.gridColumn,
             gridRow: `${item.gridRow} / span ${item.rowSpan}`,

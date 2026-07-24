@@ -7,7 +7,7 @@ import { MarqueeFooter } from "@/components/works/MarqueeFooter";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { WORKS } from "@/data/works";
 import { useFilter } from "@/context/FilterContext";
-import { wakePreviewVideos, warmPreviewVideoCache } from "@/lib/previewVideos";
+import { wakePreviewVideos } from "@/lib/previewVideos";
 import type { Work } from "@/types/work";
 
 export default function WorksPage() {
@@ -51,15 +51,7 @@ export default function WorksPage() {
       document.removeEventListener("pointerdown", wake, captureOptions);
       document.removeEventListener("visibilitychange", wake);
     };
-  }, [filteredWorks]);
-
-  useEffect(() => {
-    const previewUrls = WORKS
-      .map((work) => work.previewVideo)
-      .filter((url): url is string => Boolean(url));
-
-    return warmPreviewVideoCache(previewUrls);
-  }, []);
+  }, [activeFilter]);
 
   return (
     <>
@@ -113,7 +105,7 @@ export default function WorksPage() {
       <div className="works-mobile-top-mask" />
       <main className="works-enter" style={{ display: "flex", flexDirection: "column", minHeight: "100vh", paddingTop: "var(--header-height)" }}>
         <div style={{ flex: "1 0 auto" }}>
-          <WorksGrid works={filteredWorks} onOpen={setSelectedWork} />
+          <WorksGrid works={filteredWorks} onOpen={setSelectedWork} animationKey={activeFilter} />
         </div>
         <div style={{ position: "relative", minHeight: "clamp(80px, 14vw, 200px)" }}>
           {showMarquee && <MarqueeFooter />}
