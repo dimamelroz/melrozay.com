@@ -248,7 +248,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-2.svg",
-    previewVideo: "/works/ffmquiz-preview-handbrake.mp4",
+    previewVideo: "/works/ffmquiz-preview2-handbrake.mp4",
     fullVideo: { provider: "youtube", id: "AyXwNtZ5vWk" },
   },
 ];
