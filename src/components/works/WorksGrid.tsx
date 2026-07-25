@@ -35,13 +35,13 @@ function computeLayout(works: Work[], columns: 2 | 3): LayoutItem[] {
 }
 
 const ANIM_STYLE = `
-  @keyframes work-slide-up {
-    from { transform: translateY(120px); opacity: 0; }
-    to   { transform: translateY(0); opacity: 1; }
+  @keyframes work-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
   .work-item {
     opacity: 0;
-    animation: work-slide-up 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: work-fade-in 0.45s ease forwards;
   }
 `;
 
