@@ -28,11 +28,22 @@ export function playPreviewVideos() {
     .forEach(playPreviewVideo);
 }
 
+let wakeRaf = 0;
+let wakeTimeoutShort = 0;
+let wakeTimeoutLong = 0;
+
 export function wakePreviewVideos() {
   if (typeof window === "undefined") return;
 
+  if (wakeRaf) cancelAnimationFrame(wakeRaf);
+  window.clearTimeout(wakeTimeoutShort);
+  window.clearTimeout(wakeTimeoutLong);
+
   playPreviewVideos();
-  requestAnimationFrame(playPreviewVideos);
-  window.setTimeout(playPreviewVideos, 250);
-  window.setTimeout(playPreviewVideos, 1000);
+  wakeRaf = requestAnimationFrame(() => {
+    wakeRaf = 0;
+    playPreviewVideos();
+  });
+  wakeTimeoutShort = window.setTimeout(playPreviewVideos, 250);
+  wakeTimeoutLong = window.setTimeout(playPreviewVideos, 1000);
 }

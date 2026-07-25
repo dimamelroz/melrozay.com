@@ -63,6 +63,9 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       video.removeEventListener("canplay", playPreview);
       window.removeEventListener("pageshow", playPreview);
       document.removeEventListener("visibilitychange", playPreview);
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
     };
   }, [work.previewVideo]);
 

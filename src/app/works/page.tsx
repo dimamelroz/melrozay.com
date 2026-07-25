@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { WorksGrid } from "@/components/works/WorksGrid";
 import { VideoLightbox } from "@/components/works/VideoLightbox";
 import { MarqueeFooter } from "@/components/works/MarqueeFooter";
@@ -15,10 +15,13 @@ export default function WorksPage() {
   const [selectedWork, setSelectedWork] = useState<Work | null>(null);
   const [showMarquee, setShowMarquee] = useState(false);
 
-  const filteredWorks =
-    activeFilter === "all"
-      ? WORKS
-      : WORKS.filter((w) => w.filterGroup === activeFilter);
+  const filteredWorks = useMemo(
+    () =>
+      activeFilter === "all"
+        ? WORKS
+        : WORKS.filter((w) => w.filterGroup === activeFilter),
+    [activeFilter]
+  );
 
   const handleClose = useCallback(() => {
     wakePreviewVideos();
