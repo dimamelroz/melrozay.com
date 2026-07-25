@@ -11,8 +11,10 @@ interface WorkCardProps {
 }
 
 export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [videoReady, setVideoReady] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const canOpen = Boolean(onClick && work.fullVideo);
   const roleLabel = work.role.toLocaleLowerCase("ru-RU");
   const projectTypeLabel = work.projectType.toLocaleLowerCase("ru-RU");
@@ -45,8 +47,32 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
   };
 
   useEffect(() => {
+    setVideoReady(false);
+  }, [previewVideoSrc, shouldLoadVideo]);
+
+  useEffect(() => {
+    if (!previewVideoSrc) return;
+
+    const wrapper = wrapperRef.current;
+    if (!wrapper || typeof IntersectionObserver === "undefined") {
+      setShouldLoadVideo(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShouldLoadVideo(entry.isIntersecting);
+      },
+      { rootMargin: "360px 0px" }
+    );
+
+    observer.observe(wrapper);
+    return () => observer.disconnect();
+  }, [previewVideoSrc]);
+
+  useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !shouldLoadVideo) return;
 
     const playPreview = () => {
       playPreviewVideo(video);
@@ -64,13 +90,12 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       window.removeEventListener("pageshow", playPreview);
       document.removeEventListener("visibilitychange", playPreview);
       video.pause();
-      video.removeAttribute("src");
-      video.load();
     };
-  }, [work.previewVideo]);
+  }, [shouldLoadVideo, work.previewVideo]);
 
   return (
     <div
+      ref={wrapperRef}
       role={canOpen ? "button" : undefined}
       tabIndex={canOpen ? 0 : undefined}
       onClick={canOpen ? onClick : undefined}
@@ -89,11 +114,12 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       <img
         src={posterSrc}
         alt={work.subtitle ?? work.headline ?? ""}
-        loading="lazy"
+        loading="eager"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {previewVideoSrc && (
+      {previewVideoSrc && shouldLoadVideo && (
         <video
           ref={videoRef}
           src={previewVideoSrc}
@@ -102,7 +128,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
           loop
           playsInline
           controls={false}
-          preload="auto"
+          preload="metadata"
           poster={posterSrc}
           data-preview-video="true"
           disablePictureInPicture
