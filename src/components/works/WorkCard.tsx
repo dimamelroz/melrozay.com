@@ -59,11 +59,12 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       return;
     }
 
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
     const observer = new IntersectionObserver(
       ([entry]) => {
         setShouldLoadVideo(entry.isIntersecting);
       },
-      { rootMargin: "360px 0px" }
+      { rootMargin: isMobile ? "1800px 0px" : "600px 0px" }
     );
 
     observer.observe(wrapper);
@@ -128,7 +129,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
           loop
           playsInline
           controls={false}
-          preload="metadata"
+          preload="auto"
           poster={posterSrc}
           data-preview-video="true"
           disablePictureInPicture
