@@ -46,10 +46,9 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
 
   const handleVideoReady = () => {
     const video = videoRef.current;
-    if (!videoReady && video && video.currentTime > 0.05) {
+    if (video && video.currentTime > 0.05) {
       video.currentTime = 0;
     }
-    setVideoReady(true);
     if (video) playPreviewVideo(video);
   };
 
@@ -142,6 +141,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
           disablePictureInPicture
           onLoadedData={handleVideoReady}
           onCanPlay={handleVideoReady}
+          onPlaying={() => setVideoReady(true)}
           className="transition-opacity duration-500"
           style={{
             ...mediaStyle,

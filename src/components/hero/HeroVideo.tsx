@@ -21,15 +21,24 @@ export function HeroVideo() {
     };
     tryPlay();
     v.addEventListener("canplay", tryPlay);
-    return () => v.removeEventListener("canplay", tryPlay);
+    window.addEventListener("pageshow", tryPlay);
+    document.addEventListener("visibilitychange", tryPlay);
+    window.addEventListener("pointerdown", tryPlay);
+    window.addEventListener("touchstart", tryPlay);
+    return () => {
+      v.removeEventListener("canplay", tryPlay);
+      window.removeEventListener("pageshow", tryPlay);
+      document.removeEventListener("visibilitychange", tryPlay);
+      window.removeEventListener("pointerdown", tryPlay);
+      window.removeEventListener("touchstart", tryPlay);
+    };
   }, []);
 
   const handleVideoReady = () => {
     const video = videoRef.current;
-    if (!videoReady && video && video.currentTime > 0.05) {
+    if (video && video.currentTime > 0.05) {
       video.currentTime = 0;
     }
-    setVideoReady(true);
     video?.play().catch(() => {
       // Autoplay may be blocked until interaction; ignore.
     });
@@ -52,9 +61,9 @@ export function HeroVideo() {
         loop
         playsInline
         preload="auto"
-        poster={desktopPosterSrc}
         onLoadedData={handleVideoReady}
         onCanPlay={handleVideoReady}
+        onPlaying={() => setVideoReady(true)}
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
         style={{
           width: "100%",
