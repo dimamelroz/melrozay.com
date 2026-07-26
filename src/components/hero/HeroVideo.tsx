@@ -5,7 +5,8 @@ import { useEffect, useRef, useState } from "react";
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
-  const posterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-1";
+  const desktopPosterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-1";
+  const mobilePosterSrc = "/posters/showreel4-mobile-handbrake.mp4.jpg?v=first-frame-1";
   const mobileSrc = "/works/showreel4-mobile-handbrake.mp4";
   const desktopSrc = "/works/showreel4-handbrake.mp4";
 
@@ -36,11 +37,14 @@ export function HeroVideo() {
 
   return (
     <div className="absolute inset-0 z-0 pointer-events-none">
-      <img
-        src={posterSrc}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+      <picture>
+        <source srcSet={mobilePosterSrc} media="(max-width: 767px)" />
+        <img
+          src={desktopPosterSrc}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </picture>
       <video
         ref={videoRef}
         autoPlay
@@ -48,7 +52,7 @@ export function HeroVideo() {
         loop
         playsInline
         preload="auto"
-        poster={posterSrc}
+        poster={desktopPosterSrc}
         onLoadedData={handleVideoReady}
         onCanPlay={handleVideoReady}
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"

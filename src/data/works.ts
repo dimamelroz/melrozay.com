@@ -168,6 +168,18 @@ export const WORKS: Work[] = [
     fullVideo: { provider: "youtube", id: "Oy6QTuYpqnE" },
   },
   {
+    id: "finn-flare-brand-story",
+    headline: "FINN FLARE",
+    subtitle: "история создания бренда",
+    role: "Director",
+    projectType: "Documentary",
+    filterGroup: "commercial",
+    orientation: "horizontal",
+    cover: "/placeholder/work-cover-2.svg",
+    previewVideo: "/works/finn-flare-preview-handbrake.mp4",
+    fullVideo: { provider: "kinescope", id: "5eKHS9HP9Hkojx4etXjjHd" },
+  },
+  {
     id: "friendly-thug-calmer",
     headline: "FRIENDLY THUG 52 NGG",
     subtitle: "Calmer",
