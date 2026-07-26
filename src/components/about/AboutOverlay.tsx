@@ -89,7 +89,7 @@ export function AboutOverlay() {
           {/* Close button */}
           <button
             onClick={() => setOpen(false)}
-            className="about-close-button absolute text-white/70 hover:text-white transition-opacity cursor-pointer border-none z-20"
+            className="about-close-button about-close-button-desktop absolute text-white/70 hover:text-white transition-opacity cursor-pointer border-none z-20"
             aria-label="Close about"
           >
             <X size={30} />
@@ -102,6 +102,16 @@ export function AboutOverlay() {
               paddingBottom="0"
               speed={46}
             />
+          </div>
+
+          <div className="about-mobile-close-row" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setOpen(false)}
+              className="about-close-button about-close-button-mobile text-white/70 hover:text-white transition-opacity cursor-pointer border-none"
+              aria-label="Close about"
+            >
+              <X size={30} />
+            </button>
           </div>
 
           {/* Content */}
@@ -127,6 +137,9 @@ export function AboutOverlay() {
                 padding-top: 4px;
                 margin-bottom: 10px;
               }
+              .about-mobile-close-row {
+                display: none;
+              }
               .about-photo-frame {
                 height: min(68vh, 680px);
               }
@@ -149,8 +162,18 @@ export function AboutOverlay() {
               @media (max-width: 767px) {
                 .about-spacer { display: none !important; }
                 .about-container { padding-top: 0 !important; padding-bottom: 32px !important; }
-                .about-marquee { padding-top: 10px !important; margin-bottom: 10px !important; }
-                .about-close-button { top: 72px !important; right: 18px !important; width: 34px !important; height: 34px !important; }
+                .about-marquee { padding-top: 10px !important; margin-bottom: 0 !important; }
+                .about-close-button-desktop { display: none !important; }
+                .about-mobile-close-row {
+                  display: flex !important;
+                  justify-content: flex-end;
+                  padding: 0 18px 8px;
+                }
+                .about-close-button-mobile {
+                  position: static !important;
+                  width: 34px !important;
+                  height: 34px !important;
+                }
                 .about-photo-frame { height: auto !important; }
                 .about-row { gap: 20px !important; }
               }

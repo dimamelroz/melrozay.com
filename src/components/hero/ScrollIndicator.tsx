@@ -10,7 +10,7 @@ interface ScrollIndicatorProps {
 
 export function ScrollIndicator({ onClick }: ScrollIndicatorProps) {
   return (
-    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
+    <div className="home-scroll-indicator absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-1">
       <Link
         href="/works"
         onClick={(e) => { e.preventDefault(); onClick?.(); }}
@@ -30,6 +30,11 @@ export function ScrollIndicator({ onClick }: ScrollIndicatorProps) {
           <ChevronDown size={20} color="white" />
         </motion.span>
       </Link>
+      <style>{`
+        .home-scroll-indicator {
+          bottom: var(--home-bottom-offset, max(32px, calc(env(safe-area-inset-bottom) + 24px)));
+        }
+      `}</style>
     </div>
   );
 }
