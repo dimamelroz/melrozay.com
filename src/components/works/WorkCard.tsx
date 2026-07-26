@@ -36,6 +36,13 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       : forcedAspect === "16/9"
       ? "w-full aspect-video"
       : "w-full aspect-[9/16]";
+  const mediaStyle = {
+    position: "absolute",
+    inset: -1,
+    width: "calc(100% + 2px)",
+    height: "calc(100% + 2px)",
+    objectFit: "cover",
+  } as const;
 
   const handleVideoReady = () => {
     const video = videoRef.current;
@@ -110,14 +117,14 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       }}
       onPointerDownCapture={wakePreviewVideos}
       onTouchStartCapture={wakePreviewVideos}
-      className={`${wrapperClass} relative overflow-hidden ${canOpen ? "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-white" : "cursor-default"} group`}
+      className={`${wrapperClass} relative overflow-hidden bg-black ${canOpen ? "cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-white" : "cursor-default"} group`}
     >
       <img
         src={posterSrc}
         alt={work.subtitle ?? work.headline ?? ""}
         loading="eager"
         decoding="async"
-        className="absolute inset-0 w-full h-full object-cover"
+        style={mediaStyle}
       />
 
       {previewVideoSrc && shouldLoadVideo && (
@@ -135,11 +142,9 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
           disablePictureInPicture
           onLoadedData={handleVideoReady}
           onCanPlay={handleVideoReady}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+          className="transition-opacity duration-500"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
+            ...mediaStyle,
             opacity: videoReady ? 1 : 0,
           }}
         />

@@ -6,6 +6,8 @@ export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
   const posterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-1";
+  const mobileSrc = "/works/showreel4-mobile-handbrake.mp4";
+  const desktopSrc = "/works/showreel4-handbrake.mp4";
 
   useEffect(() => {
     const v = videoRef.current;
@@ -41,7 +43,6 @@ export function HeroVideo() {
       />
       <video
         ref={videoRef}
-        src="/works/showreel4-handbrake.mp4"
         autoPlay
         muted
         loop
@@ -57,7 +58,10 @@ export function HeroVideo() {
           objectFit: "cover",
           opacity: videoReady ? 1 : 0,
         }}
-      />
+      >
+        <source src={mobileSrc} media="(max-width: 767px)" type="video/mp4" />
+        <source src={desktopSrc} type="video/mp4" />
+      </video>
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
