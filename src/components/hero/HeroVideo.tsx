@@ -4,11 +4,36 @@ import { useEffect, useRef, useState } from "react";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoSrcRef = useRef<string | null>(null);
   const [videoReady, setVideoReady] = useState(false);
-  const desktopPosterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-1";
-  const mobilePosterSrc = "/posters/showreel4-mobile-handbrake.mp4.jpg?v=first-frame-1";
-  const mobileSrc = "/works/showreel4-mobile-handbrake.mp4";
-  const desktopSrc = "/works/showreel4-handbrake.mp4";
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const desktopPosterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-2";
+  const mobilePosterSrc = "/posters/showreel4-mobile-handbrake.mp4.jpg?v=first-frame-2";
+  const mobileSrc = "/works/showreel4-mobile-handbrake.mp4?v=mobile-2";
+  const desktopSrc = "/works/showreel4-handbrake.mp4?v=desktop-2";
+
+  useEffect(() => {
+    const pickVideoSrc = () => {
+      const isMobile =
+        window.matchMedia("(max-width: 767px)").matches ||
+        window.innerWidth <= 767 ||
+        /Android|iPhone|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const nextSrc = isMobile ? mobileSrc : desktopSrc;
+      if (videoSrcRef.current !== nextSrc) {
+        videoSrcRef.current = nextSrc;
+        setVideoReady(false);
+        setVideoSrc(nextSrc);
+      }
+    };
+
+    pickVideoSrc();
+    window.addEventListener("resize", pickVideoSrc);
+    window.addEventListener("orientationchange", pickVideoSrc);
+    return () => {
+      window.removeEventListener("resize", pickVideoSrc);
+      window.removeEventListener("orientationchange", pickVideoSrc);
+    };
+  }, []);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -32,7 +57,7 @@ export function HeroVideo() {
       window.removeEventListener("pointerdown", tryPlay);
       window.removeEventListener("touchstart", tryPlay);
     };
-  }, []);
+  }, [videoSrc]);
 
   const handleVideoReady = () => {
     const video = videoRef.current;
@@ -54,27 +79,28 @@ export function HeroVideo() {
           className="absolute inset-0 w-full h-full object-cover"
         />
       </picture>
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        onLoadedData={handleVideoReady}
-        onCanPlay={handleVideoReady}
-        onPlaying={() => setVideoReady(true)}
-        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          opacity: videoReady ? 1 : 0,
-        }}
-      >
-        <source src={mobileSrc} media="(max-width: 767px)" type="video/mp4" />
-        <source src={desktopSrc} type="video/mp4" />
-      </video>
+      {videoSrc ? (
+        <video
+          key={videoSrc}
+          ref={videoRef}
+          src={videoSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onLoadedData={handleVideoReady}
+          onCanPlay={handleVideoReady}
+          onPlaying={() => setVideoReady(true)}
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: videoReady ? 1 : 0,
+          }}
+        />
+      ) : null}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
