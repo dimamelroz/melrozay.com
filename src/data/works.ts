@@ -152,7 +152,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-3.svg",
-    previewVideo: "/works/redbull-doc1-preview-handbrake.mp4",
+    previewVideo: "/works/redbull-doc1-preview-handbrake-576p.mp4",
     fullVideo: { provider: "kinescope", id: "jiASKd9YxbXzS4di6L2D7X" },
   },
   {
