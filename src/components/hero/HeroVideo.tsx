@@ -6,6 +6,7 @@ export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoSrcRef = useRef<string | null>(null);
   const [videoReady, setVideoReady] = useState(false);
+  const [showPlayHint, setShowPlayHint] = useState(false);
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const desktopPosterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-2";
   const mobilePosterSrc = "/posters/showreel4-mobile-handbrake.mp4.jpg?v=first-frame-2";
@@ -22,6 +23,7 @@ export function HeroVideo() {
       if (videoSrcRef.current !== nextSrc) {
         videoSrcRef.current = nextSrc;
         setVideoReady(false);
+        setShowPlayHint(false);
         setVideoSrc(nextSrc);
       }
     };
@@ -59,6 +61,19 @@ export function HeroVideo() {
     };
   }, [videoSrc]);
 
+  useEffect(() => {
+    if (!videoSrc || videoReady) {
+      setShowPlayHint(false);
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowPlayHint(true);
+    }, 1200);
+
+    return () => window.clearTimeout(timer);
+  }, [videoReady, videoSrc]);
+
   const handleVideoReady = () => {
     const video = videoRef.current;
     if (video && video.currentTime > 0.05) {
@@ -66,6 +81,15 @@ export function HeroVideo() {
     }
     video?.play().catch(() => {
       // Autoplay may be blocked until interaction; ignore.
+    });
+  };
+
+  const handlePlayHintClick = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.play().catch(() => {
+      // Safari may still block playback until it accepts the gesture.
     });
   };
 
@@ -103,6 +127,26 @@ export function HeroVideo() {
             opacity: videoReady ? 1 : 0,
           }}
         />
+      ) : null}
+      {showPlayHint && !videoReady ? (
+        <button
+          type="button"
+          aria-label="play showreel"
+          onClick={handlePlayHintClick}
+          className="absolute left-1/2 top-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent p-0 text-white opacity-90 pointer-events-auto"
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              width: 0,
+              height: 0,
+              borderTop: "16px solid transparent",
+              borderBottom: "16px solid transparent",
+              borderLeft: "24px solid currentColor",
+              transform: "translateX(4px)",
+            }}
+          />
+        </button>
       ) : null}
       <div
         className="absolute inset-0 pointer-events-none"
