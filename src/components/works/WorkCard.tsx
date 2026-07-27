@@ -136,13 +136,13 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
           playsInline
           controls={false}
           preload="auto"
-          poster={posterSrc}
           data-preview-video="true"
           disablePictureInPicture
+          disableRemotePlayback
           onLoadedData={handleVideoReady}
           onCanPlay={handleVideoReady}
           onPlaying={() => setVideoReady(true)}
-          className="transition-opacity duration-500"
+          className="background-video transition-opacity duration-500"
           style={{
             ...mediaStyle,
             opacity: videoReady ? 1 : 0,

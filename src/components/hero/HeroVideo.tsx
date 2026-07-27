@@ -88,11 +88,14 @@ export function HeroVideo() {
           muted
           loop
           playsInline
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
           preload="auto"
           onLoadedData={handleVideoReady}
           onCanPlay={handleVideoReady}
           onPlaying={() => setVideoReady(true)}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+          className="background-video absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
           style={{
             width: "100%",
             height: "100%",
