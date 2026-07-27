@@ -11,7 +11,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-2.svg",
-    previewVideo: "/works/liga-stavok-preview-handbrake.mp4",
+    previewVideo: "/works/liga-stavok-preview-handbrake-720p.mp4",
     fullVideo: { provider: "kinescope", id: "7XTaALgJmHEWxLpYKwvjEn" },
   },
   {
@@ -23,7 +23,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-vertical-1.svg",
-    previewVideo: "/works/wls-ya-tebya-lyublyu-preview-handbrake.mp4",
+    previewVideo: "/works/wls-yatebyalublyu-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "-zh6_OuYUoE" },
   },
   {
@@ -35,7 +35,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-1.svg",
-    previewVideo: "/works/dobry-preview.mp4",
+    previewVideo: "/works/dobry-preview-handbrake-720p.mp4",
     fullVideo: { provider: "kinescope", id: "fWNV18hpcYBXbTo6icfmiu" },
   },
   {
@@ -46,7 +46,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-2.svg",
-    previewVideo: "/works/urbanvibes-24-preview-handbrake.mp4",
+    previewVideo: "/works/urbanvibes-24-preview-handbrake-720p.mp4",
     fullVideo: { provider: "kinescope", id: "cd2FqgmYghpdtptC5Nvj2H" },
   },
   {
@@ -58,7 +58,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-4.svg",
-    previewVideo: "/works/alblak-7952-preview-handbrake.mp4",
+    previewVideo: "/works/alblak-7952-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "YAdL4iobqwE" },
   },
   {
@@ -69,7 +69,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-2.svg",
-    previewVideo: "/works/urbanvibes-23-preview-handbrake.mp4",
+    previewVideo: "/works/urbanvibes-23-preview-handbrake-720p.mp4",
     fullVideo: { provider: "kinescope", id: "aRZUvgqsh8zqnEd1iCgPYt" },
   },
   {
@@ -81,7 +81,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-5.svg",
-    previewVideo: "/works/ffmkitchen-preview-handbrake.mp4",
+    previewVideo: "/works/ffmkitchen-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "qKchhY3BgS0" },
   },
   {
@@ -104,7 +104,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-3.svg",
-    previewVideo: "/works/whole-lotta-swag-lermontov-handbrake.mp4",
+    previewVideo: "/works/whole-lotta-swag-lermontov-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "Vrd_PKIldBc" },
   },
   {
@@ -116,7 +116,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-1.svg",
-    previewVideo: "/works/macan-preview-handbrake.mp4",
+    previewVideo: "/works/macan-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "l-T72v41Rsw" },
   },
   {
@@ -128,7 +128,7 @@ export const WORKS: Work[] = [
     filterGroup: "commercial",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-1.svg",
-    previewVideo: "/works/lamoda-combo-preview-handbrake.mp4",
+    previewVideo: "/works/lamoda-combo-preview-handbrake-720p.mp4",
     fullVideo: { provider: "kinescope", id: "kHm2LKo4T7pfdETu6k832U" },
   },
   {
@@ -140,7 +140,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-vertical-1.svg",
-    previewVideo: "/works/wls-bcl-preview-handbrake.mp4",
+    previewVideo: "/works/wls-bcl-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "xmE_8Y7Ofu4" },
   },
   {
@@ -188,7 +188,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-1.svg",
-    previewVideo: "/works/friendly-thug-calmer-preview-handbrake.mp4",
+    previewVideo: "/works/friendly-thug-calmer-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "TIYgqUlZ3L4" },
   },
   {
@@ -212,7 +212,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-vertical-1.svg",
-    previewVideo: "/works/wls-offer-preview-handbrake.mp4",
+    previewVideo: "/works/wls-offer-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "axdS0gkRSJI" },
   },
   {
@@ -236,7 +236,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-1.svg",
-    previewVideo: "/works/wls-basta-preview-handbrake.mp4",
+    previewVideo: "/works/wls-basta-preview-handbrake-720p.mp4",
     fullVideo: { provider: "youtube", id: "YG3Ba8s0Mzo" },
   },
   {
