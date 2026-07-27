@@ -135,17 +135,17 @@ export function HeroVideo() {
           onClick={handlePlayHintClick}
           className="absolute left-1/2 top-1/2 z-10 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent p-0 text-white opacity-90 pointer-events-auto"
         >
-          <span
+          <svg
             aria-hidden="true"
-            style={{
-              width: 0,
-              height: 0,
-              borderTop: "16px solid transparent",
-              borderBottom: "16px solid transparent",
-              borderLeft: "24px solid currentColor",
-              transform: "translateX(4px)",
-            }}
-          />
+            viewBox="0 0 24 24"
+            className="h-10 w-10"
+            style={{ transform: "translateX(3px)" }}
+          >
+            <path
+              d="M6.5 5.9c0-1.55 1.68-2.51 3.01-1.72l10.2 6.1c1.29.77 1.29 2.64 0 3.42l-10.2 6.1c-1.33.79-3.01-.17-3.01-1.72V5.9Z"
+              fill="currentColor"
+            />
+          </svg>
         </button>
       ) : null}
       <div
