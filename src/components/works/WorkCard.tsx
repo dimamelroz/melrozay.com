@@ -8,13 +8,15 @@ interface WorkCardProps {
   work: Work;
   onClick?: () => void;
   forcedAspect: "16/9" | "9/16" | "fill";
+  loadVideo?: boolean;
+  onVideoLoadSettled?: () => void;
 }
 
-export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
+export function WorkCard({ work, onClick, forcedAspect, loadVideo = false, onVideoLoadSettled }: WorkCardProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const loadSettledRef = useRef(false);
   const [videoReady, setVideoReady] = useState(false);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const canOpen = Boolean(onClick && work.fullVideo);
   const roleLabel = work.role.toLocaleLowerCase("ru-RU");
   const projectTypeLabel = work.projectType.toLocaleLowerCase("ru-RU");
@@ -26,6 +28,7 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
   const previewVideoSrc = work.previewVideo
     ? `${work.previewVideo}?v=noaudio-2`
     : undefined;
+  const shouldLoadVideo = Boolean(previewVideoSrc && loadVideo);
   const posterSrc = work.previewVideo
     ? `/posters/${work.previewVideo.split("/").pop()}.jpg`
     : work.cover;
@@ -50,32 +53,28 @@ export function WorkCard({ work, onClick, forcedAspect }: WorkCardProps) {
       video.currentTime = 0;
     }
     if (video) playPreviewVideo(video);
+    if (!loadSettledRef.current) {
+      loadSettledRef.current = true;
+      onVideoLoadSettled?.();
+    }
   };
 
   useEffect(() => {
     setVideoReady(false);
+    loadSettledRef.current = false;
   }, [previewVideoSrc, shouldLoadVideo]);
 
   useEffect(() => {
-    if (!previewVideoSrc) return;
+    if (!shouldLoadVideo) return;
 
-    const wrapper = wrapperRef.current;
-    if (!wrapper || typeof IntersectionObserver === "undefined") {
-      setShouldLoadVideo(true);
-      return;
-    }
+    const fallback = window.setTimeout(() => {
+      if (loadSettledRef.current) return;
+      loadSettledRef.current = true;
+      onVideoLoadSettled?.();
+    }, 2500);
 
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShouldLoadVideo(entry.isIntersecting);
-      },
-      { rootMargin: isMobile ? "1800px 0px" : "600px 0px" }
-    );
-
-    observer.observe(wrapper);
-    return () => observer.disconnect();
-  }, [previewVideoSrc]);
+    return () => window.clearTimeout(fallback);
+  }, [onVideoLoadSettled, shouldLoadVideo]);
 
   useEffect(() => {
     const video = videoRef.current;

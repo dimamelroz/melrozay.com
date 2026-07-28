@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { WorkCard } from "./WorkCard";
 import { GAP_PX } from "@/lib/constants";
 import type { Work } from "@/types/work";
@@ -55,8 +55,10 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
   const [columns, setColumns] = useState<1 | 2 | 3>(1);
   const [rowHeightPx, setRowHeightPx] = useState(0);
   const [hasMeasured, setHasMeasured] = useState(false);
+  const [videoLoadState, setVideoLoadState] = useState({ key: "", limit: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const gridKey = works.map((w) => w.id).join(",");
+  const videoLoadLimit = videoLoadState.key === gridKey ? videoLoadState.limit : 0;
 
   useEffect(() => {
     const updateLayout = () => {
@@ -81,6 +83,34 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
       window.removeEventListener("resize", updateLayout);
     };
   }, []);
+
+  useEffect(() => {
+    if (!hasMeasured) return;
+
+    const concurrency = columns === 1 ? 2 : 3;
+    setVideoLoadState({ key: gridKey, limit: Math.min(concurrency, works.length) });
+  }, [columns, gridKey, hasMeasured, works.length]);
+
+  useEffect(() => {
+    if (!hasMeasured || videoLoadLimit >= works.length) return;
+
+    const delay = columns === 1 ? 900 : 650;
+    const timer = window.setTimeout(() => {
+      setVideoLoadState((current) => ({
+        key: gridKey,
+        limit: Math.min((current.key === gridKey ? current.limit : 0) + 1, works.length),
+      }));
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [columns, hasMeasured, videoLoadLimit, works.length]);
+
+  const handleVideoLoadSettled = useCallback(() => {
+    setVideoLoadState((current) => ({
+      key: gridKey,
+      limit: Math.min((current.key === gridKey ? current.limit : 0) + 1, works.length),
+    }));
+  }, [gridKey, works.length]);
 
   if (!hasMeasured) {
     return (
@@ -111,6 +141,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
               work={work}
               onClick={work.fullVideo ? () => onOpen(work) : undefined}
               forcedAspect={work.orientation === "horizontal" ? "16/9" : "9/16"}
+              loadVideo={false}
             />
           </div>
         ))}
@@ -133,6 +164,8 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
               work={work}
               onClick={work.fullVideo ? () => onOpen(work) : undefined}
               forcedAspect={work.orientation === "horizontal" ? "16/9" : "9/16"}
+              loadVideo={index < videoLoadLimit}
+              onVideoLoadSettled={handleVideoLoadSettled}
             />
           </div>
         ))}
@@ -160,7 +193,7 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
       }}
     >
       <style>{ANIM_STYLE}</style>
-      {sortedItems.map((item) => (
+      {sortedItems.map((item, index) => (
         <div
           key={item.work.id}
           className="work-item"
@@ -176,6 +209,8 @@ export function WorksGrid({ works, onOpen }: WorksGridProps) {
             work={item.work}
             onClick={item.work.fullVideo ? () => onOpen(item.work) : undefined}
             forcedAspect={rowHeightPx > 0 ? "fill" : (item.work.orientation === "horizontal" ? "16/9" : "9/16")}
+            loadVideo={index < videoLoadLimit}
+            onVideoLoadSettled={handleVideoLoadSettled}
           />
         </div>
       ))}
