@@ -11,7 +11,7 @@ export function HeroVideo() {
   const desktopPosterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-2";
   const mobilePosterSrc = "/posters/showreel4-mobile-handbrake.mp4.jpg?v=first-frame-2";
   const mobileSrc = "/works/showreel4-mobile-handbrake.mp4?v=mobile-2";
-  const desktopSrc = "/works/showreel4-handbrake.mp4?v=desktop-2";
+  const desktopSrc = "/works/showreel4-v2-handbrake.mp4?v=desktop-v2";
 
   useEffect(() => {
     const pickVideoSrc = () => {
