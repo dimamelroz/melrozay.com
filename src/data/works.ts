@@ -6,7 +6,7 @@ export const WORKS: Work[] = [
     id: "liga-stavok",
     headline: "ЛИГА СТАВОК",
     subtitle: "Gorilla Glue & Lil Naku – Лига Лапты",
-    role: "Director + Editor",
+    role: "Director + Creative Producer + Editor",
     projectType: "OLV",
     filterGroup: "commercial",
     orientation: "horizontal",
@@ -41,7 +41,7 @@ export const WORKS: Work[] = [
   {
     id: "urban-vibes-2024",
     subtitle: "URBAN VIBES",
-    role: "DIRECTOR",
+    role: "Director + Creative Producer",
     projectType: "OLV",
     filterGroup: "commercial",
     orientation: "horizontal",
@@ -64,7 +64,7 @@ export const WORKS: Work[] = [
   {
     id: "urban-vibes",
     subtitle: "URBAN VIBES",
-    role: "DIRECTOR",
+    role: "Director + Creative Producer",
     projectType: "OLV",
     filterGroup: "commercial",
     orientation: "horizontal",
