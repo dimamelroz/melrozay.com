@@ -10,8 +10,8 @@ export function HeroVideo() {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const desktopPosterSrc = "/posters/showreel4-handbrake.mp4.jpg?v=first-frame-2";
   const mobilePosterSrc = "/posters/showreel4-mobile-handbrake.mp4.jpg?v=first-frame-2";
-  const mobileSrc = "/works/showreel4-mobile-handbrake.mp4?v=mobile-2";
-  const desktopSrc = "/works/showreel4-v2-handbrake.mp4?v=desktop-v2";
+  const mobileSrc = "/works/showreel5-mobile-handbrake.mp4?v=mobile-5";
+  const desktopSrc = "/works/showreel5-handbrake.mp4?v=desktop-5";
 
   useEffect(() => {
     const pickVideoSrc = () => {
