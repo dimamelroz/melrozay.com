@@ -11,6 +11,7 @@ export const WORKS: Work[] = [
     filterGroup: "music-video",
     orientation: "horizontal",
     cover: "/placeholder/work-cover-1.svg",
+    poster: "/posters/waka-mas-preview-handbrake-v2.jpg",
     previewVideo: "/works/waka-mas-preview-handbrake.mp4",
     fullVideo: { provider: "youtube", id: "WkcP_uC8FU8" },
   },

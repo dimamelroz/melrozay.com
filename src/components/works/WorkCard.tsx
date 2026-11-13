@@ -29,9 +29,9 @@ export function WorkCard({ work, onClick, forcedAspect, loadVideo = false, onVid
     ? `${work.previewVideo}?v=noaudio-2`
     : undefined;
   const shouldLoadVideo = Boolean(previewVideoSrc && loadVideo);
-  const posterSrc = work.previewVideo
+  const posterSrc = work.poster ?? (work.previewVideo
     ? `/posters/${work.previewVideo.split("/").pop()}.jpg`
-    : work.cover;
+    : work.cover);
 
   const wrapperClass =
     forcedAspect === "fill"
