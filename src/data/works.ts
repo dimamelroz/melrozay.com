@@ -3,6 +3,18 @@ import type { Work } from "@/types/work";
 // Real works first, then placeholders below.
 export const WORKS: Work[] = [
   {
+    id: "waka-mas",
+    headline: "Gorilla Glue & Lil Nakur feat. Waka Flocka Flame",
+    subtitle: "M.A.S.",
+    role: "DIRECTOR + EDITOR",
+    projectType: "MUSIC VIDEO",
+    filterGroup: "music-video",
+    orientation: "horizontal",
+    cover: "/placeholder/work-cover-1.svg",
+    previewVideo: "/works/waka-mas-preview-handbrake.mp4",
+    fullVideo: { provider: "youtube", id: "WkcP_uC8FU8" },
+  },
+  {
     id: "liga-stavok",
     headline: "ЛИГА СТАВОК",
     subtitle: "Gorilla Glue & Lil Naku – Лига Лапты",
