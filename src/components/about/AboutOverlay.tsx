@@ -11,6 +11,7 @@ import { SocialLinks } from "@/components/ui/SocialLinks";
 
 const ABOUT_PHOTOS = [
   { src: "/about/dima-about-main.jpg", alt: "Dima Melroz" },
+  { src: "/about/dima-about-set-new.jpg", alt: "Dima Melroz directing on set" },
   { src: "/about/dima-about-set-1.jpg", alt: "Dima Melroz on set" },
   { src: "/about/dima-about-set-2.jpg", alt: "Dima Melroz behind the camera" },
 ];
